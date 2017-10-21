@@ -1,4 +1,4 @@
-require('./server.js');
+// require('./server.js');
 
 var blockchain = require('mastercard-blockchain');
 var MasterCardAPI = blockchain.MasterCardAPI;
@@ -11,6 +11,16 @@ var keyStorePath = config.KEYSTORE_PATH; // e.g. /Users/yourname/project/sandbox
 var keyAlias = config.KEY_ALIAS;   // For production: change this to the key alias you chose when you created your production key
 var keyPassword = config.KEY_PASSWORD;   // For production: change this to the key alias you chose when you created your production key
 var appID = "TM25";
+
+// users 
+var users = JSON.parse(fs.readFileSync('./JSON/Users.json', 'utf8'))
+var NodeRSA = require('node-rsa');
+users.forEach(function(user) {
+	// generate RSA keypair 
+	var key = new NodeRSA({b: 256});
+	user.rsakey = key; // stored just for testing
+});
+
 
 
 // protobuf 
@@ -29,13 +39,15 @@ function initAPI() {
 	loadProtobuf();
 }
 
+var msgClass; 
 function loadProtobuf() {
 	protobuf.load(protoFile, function(err, root) {
 		console.log('loading protobuf');
 		if (err) {
 			console.log('error', err);
 		}
-		
+		msgClass = root.lookupType("TM25.Transaction");
+		console.log(msgClass);
 		blockchain.App.update({
 			id: appID,
 			name: appID,
@@ -60,16 +72,44 @@ function loadProtobuf() {
 	});
 }
 
-initAPI();
+initAPI(); 
 
-// function createEntry() {
-// 	console.log("create entry"); 
-// 	var payload = {
-// 		reference: , 
-// 		owner_pk: , 
-// 		recipient_pk: , 
-// 		signature: , 
-// 		type: , 
-// 	}; 
-// 	
-// }
+function createEntry() {
+	console.log("create entry"); 
+	var payload = {
+		reference: "EXAMPLE MESSAGE", 
+		owner_pk: users[0].rsakey.exportKey('public'), 
+		recipient_pk: users[1].rsakey.exportKey('public'), 
+		type: 0
+	}; 
+	var err = msgClass.verify(payload);
+	if (err) {
+		console.log(msgClass, err);
+	} else {
+		var message = msgClass.create(payload);
+		blockchain.TransactionEntry.create({
+			"app": appID,
+			"encoding": encoding,
+			"value": msgClassDef.encode(message).finish().toString(encoding)
+		}, function(err, result) {
+			if (err) {
+				console.log('error', err);
+			} else {
+				console.log(result);
+			}
+		});
+	}
+	
+}
+
+function getProperties(obj) {
+    var ret = [];
+    for (var name in obj) {
+        if (obj.hasOwnProperty(name)) {
+            ret.push(name);
+        }
+    }
+    return ret;
+}
+
+createEntry();

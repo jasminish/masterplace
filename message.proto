@@ -8,7 +8,7 @@ message Transaction {
 	bytes reference = 1;    // unique hash reference to object
 	bytes owner_pk = 2;     // owner public key
 	bytes recipient_pk = 3; // recipient public key 
-	bytes signature = 4;    // signature of owner 
+	// bytes signature = 4;    // signature of owner 
 	
 	enum TransferType {
 		REWARD = 0; // default value 
