@@ -9,8 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "mastercard-blockchain": "0.0.2",
+    "path": "^0.12.7",
     "protobufjs": "^6.8.0"
   }
 }

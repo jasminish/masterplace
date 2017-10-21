@@ -1,4 +1,4 @@
-require('./server.js');
+// require('./server.js');
 
 var blockchain = require('mastercard-blockchain');
 var MasterCardAPI = blockchain.MasterCardAPI;
@@ -27,6 +27,8 @@ function initAPI() {
 		authentication: authentication
 	});
 	loadProtobuf();
+	//console.log('---------------Loading Data....');
+	// loadData();
 }
 
 function loadProtobuf() {
@@ -59,6 +61,34 @@ function loadProtobuf() {
 		});
 	});
 }
+
+// function loadData(){
+// 	var requestData = {};
+// 	blockchain.Node.query(requestData
+// 	, function (error, data) {
+// 		if (error) {
+// 			console.error("HttpStatus: "+error.getHttpStatus());
+// 			console.error("Message: "+error.getMessage());
+// 			console.error("ReasonCode: "+error.getReasonCode());
+// 			console.error("Source: "+error.getSource());
+// 			console.error(error);
+
+// 		}
+// 		else {
+// 			console.log(data.address);     //Output-->CWy4GMxUSSCbWyLGW8F6Wa7c5P64j9AD9T
+// 			console.log(data.authority);     //Output-->SdCue1VxBaEALMHSqPcg5FEuheo6FBruGC
+// 			console.log(data.chain_height);     //Output-->1503661343
+// 			console.log(data.delay);     //Output-->5000
+// 			console.log(data.drift);     //Output-->0
+// 			console.log(data.peers[0].address);     //Output-->CcTomhnEeWDMZ9B95MKFp8bDrQYg6BQRKw
+// 			console.log(data.peers[1].address);     //Output-->ZX4pVQD5ATSiga6jpExeTjjwSMMNBgTDP8
+// 			console.log(data.public_key);     //Output-->0485673e58357908980cf4480968570d2fa6b8a4439a8a98d2748e82bfe3945a8a6da0e2a75f603ec24b496e8d9df582592d25692345e0e0805e696584d8d2fdf3
+// 			console.log(data.type);     //Output-->customer
+// 			console.log(data.unconfirmed);     //Output-->0
+// 		}
+// 	});
+// }
+
 
 initAPI();
 
