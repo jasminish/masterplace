@@ -14,11 +14,6 @@
 				"points": 10000
 			},
 		},
-		"definition": {
-	      "format": "proto3",
-	      "encoding": "base64",
-	      "messages": ""
-	    }
 	},
 	"User 2":{
 		"name":"Krittin",
@@ -31,12 +26,6 @@
 				"points": 5000
 			},
 		},
-		"definition": {
-	      "format": "proto3",
-	      "encoding": "base64",
-	      "messages": ""
-	    }
-
 	},
 	"User 3":{
 		"name":"Glen",
@@ -53,12 +42,6 @@
 				"points": 10000
 			},
 		},
-		"definition": {
-	      "format": "proto3",
-	      "encoding": "base64",
-	      "messages": ""
-	    }
-
 	},
 	"User 4":{
 		"name":"Vashon",
@@ -75,12 +58,6 @@
 				"points": 20
 			},
 		},
-		"definition": {
-	      "format": "proto3",
-	      "encoding": "base64",
-	      "messages": ""
-	    }
-	
 	}, 
 	"User 5":{
 		"name":"Jasmine",
@@ -93,11 +70,5 @@
 				"points": 34
 			},
 		},
-		"definition": {
-	      "format": "proto3",
-	      "encoding": "base64",
-	      "messages": ""
-	    }
-	
 	}
 }
