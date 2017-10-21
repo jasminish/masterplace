@@ -12,6 +12,16 @@ var keyAlias = config.KEY_ALIAS;   // For production: change this to the key ali
 var keyPassword = config.KEY_PASSWORD;   // For production: change this to the key alias you chose when you created your production key
 var appID = "TM25";
 
+// users 
+var users = JSON.parse(fs.readFileSync('./JSON/Users.json', 'utf8'))
+var NodeRSA = require('node-rsa');
+users.forEach(function(user) {
+	// generate RSA keypair 
+	var key = new NodeRSA({b: 256});
+	user.rsakey = key; // stored just for testing
+});
+
+
 
 // protobuf 
 var protobuf = require('protobufjs');
@@ -31,13 +41,15 @@ function initAPI() {
 	// loadData();
 }
 
+var msgClass; 
 function loadProtobuf() {
 	protobuf.load(protoFile, function(err, root) {
 		console.log('loading protobuf');
 		if (err) {
 			console.log('error', err);
 		}
-		
+		msgClass = root.lookupType("TM25.Transaction");
+		console.log(msgClass);
 		blockchain.App.update({
 			id: appID,
 			name: appID,
@@ -62,44 +74,44 @@ function loadProtobuf() {
 	});
 }
 
-// function loadData(){
-// 	var requestData = {};
-// 	blockchain.Node.query(requestData
-// 	, function (error, data) {
-// 		if (error) {
-// 			console.error("HttpStatus: "+error.getHttpStatus());
-// 			console.error("Message: "+error.getMessage());
-// 			console.error("ReasonCode: "+error.getReasonCode());
-// 			console.error("Source: "+error.getSource());
-// 			console.error(error);
+initAPI(); 
 
-// 		}
-// 		else {
-// 			console.log(data.address);     //Output-->CWy4GMxUSSCbWyLGW8F6Wa7c5P64j9AD9T
-// 			console.log(data.authority);     //Output-->SdCue1VxBaEALMHSqPcg5FEuheo6FBruGC
-// 			console.log(data.chain_height);     //Output-->1503661343
-// 			console.log(data.delay);     //Output-->5000
-// 			console.log(data.drift);     //Output-->0
-// 			console.log(data.peers[0].address);     //Output-->CcTomhnEeWDMZ9B95MKFp8bDrQYg6BQRKw
-// 			console.log(data.peers[1].address);     //Output-->ZX4pVQD5ATSiga6jpExeTjjwSMMNBgTDP8
-// 			console.log(data.public_key);     //Output-->0485673e58357908980cf4480968570d2fa6b8a4439a8a98d2748e82bfe3945a8a6da0e2a75f603ec24b496e8d9df582592d25692345e0e0805e696584d8d2fdf3
-// 			console.log(data.type);     //Output-->customer
-// 			console.log(data.unconfirmed);     //Output-->0
-// 		}
-// 	});
-// }
+function createEntry() {
+	console.log("create entry"); 
+	var payload = {
+		reference: "EXAMPLE MESSAGE", 
+		owner_pk: users[0].rsakey.exportKey('public'), 
+		recipient_pk: users[1].rsakey.exportKey('public'), 
+		type: 0
+	}; 
+	var err = msgClass.verify(payload);
+	if (err) {
+		console.log(msgClass, err);
+	} else {
+		var message = msgClass.create(payload);
+		blockchain.TransactionEntry.create({
+			"app": appID,
+			"encoding": encoding,
+			"value": msgClassDef.encode(message).finish().toString(encoding)
+		}, function(err, result) {
+			if (err) {
+				console.log('error', err);
+			} else {
+				console.log(result);
+			}
+		});
+	}
+	
+}
 
+function getProperties(obj) {
+    var ret = [];
+    for (var name in obj) {
+        if (obj.hasOwnProperty(name)) {
+            ret.push(name);
+        }
+    }
+    return ret;
+}
 
-initAPI();
-
-// function createEntry() {
-// 	console.log("create entry"); 
-// 	var payload = {
-// 		reference: , 
-// 		owner_pk: , 
-// 		recipient_pk: , 
-// 		signature: , 
-// 		type: , 
-// 	}; 
-// 	
-// }
+createEntry();
