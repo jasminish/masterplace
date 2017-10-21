@@ -1,4 +1,4 @@
-require('/server.js');
+require('./server.js');
 
 var blockchain = require('mastercard-blockchain');
 var MasterCardAPI = blockchain.MasterCardAPI;
