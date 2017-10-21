@@ -1,0 +1,98 @@
+{
+	"User 1":{
+		"name":"Gabriel",
+		"description":"For testing",
+		"version": 0,
+		"cardInfo":{
+			"card1":{
+				"cardNumber":7864389127678132,
+				"points": 10000
+			},
+			"card2":{
+				"cardNumber":8957243958775430,
+				"points": 10000
+			},
+		},
+		"definition": {
+	      "format": "proto3",
+	      "encoding": "base64",
+	      "messages": ""
+	    }
+	},
+	"User 2":{
+		"name":"Krittin",
+		"description":"For testing",
+		"version": 0,
+		"cardInfo":{
+			"card1":{
+				"cardNumber":1234567890112233,
+				"points": 5000
+			},
+		},
+		"definition": {
+	      "format": "proto3",
+	      "encoding": "base64",
+	      "messages": ""
+	    }
+
+	},
+	"User 3":{
+		"name":"Glen",
+		"description":"For testing 1",
+		"version": 0,
+		"cardInfo":{
+			"card1":{
+				"cardNumber":7568540968989458,
+				"points": 20
+			},
+			"card2":{
+				"cardNumber":0319247435787436,
+				"points": 10000
+			},
+		},
+		"definition": {
+	      "format": "proto3",
+	      "encoding": "base64",
+	      "messages": ""
+	    }
+
+	},
+	"User 4":{
+		"name":"Vashon",
+		"description":"For testing 1",
+		"version": 0,
+		"cardInfo":{
+			"card1":{
+				"cardNumber":7563464577346564,
+				"points": 300
+			},
+			"card2":{
+				"cardNumber":6746859773453453,
+				"points": 20
+			},
+		},
+		"definition": {
+	      "format": "proto3",
+	      "encoding": "base64",
+	      "messages": ""
+	    }
+	
+	}, 
+	"User 5":{
+		"name":"Jasmine",
+		"description":"For testing 1",
+		"version": 0,
+		"cardInfo":{
+			"card1":{
+				"cardNumber":3322110987654321,
+				"points": 34
+			},
+		},
+		"definition": {
+	      "format": "proto3",
+	      "encoding": "base64",
+	      "messages": ""
+	    }
+	
+	}
+}

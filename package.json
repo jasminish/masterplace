@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mastercard-blockchain": "0.0.2"
+    "express": "^4.16.2",
+    "mastercard-blockchain": "0.0.2",
+    "mongoose": "^4.12.3"
   }
 }
