@@ -71,7 +71,7 @@ function loadProtobuf() {
 				console.error("Source: "+error.getSource());
 				console.error(error)
 			}
-
+			
 		});
 	});
 }
@@ -110,7 +110,7 @@ methods.createEntry = function createEntry(owner_id, recipient_id, object_id, ca
 			}
 		});
 	}
-
+	
 }
 
 function getProperties(obj) {
@@ -125,99 +125,95 @@ function getProperties(obj) {
 
 methods.getLastConfirmedBlock = function(callback) {
 	var requestData = {};
-	blockchain.Block.list(requestData
-		, function (error, data) {
-			if (error) {
-				console.error("HttpStatus: "+error.getHttpStatus());
-				console.error("Message: "+error.getMessage());
-				console.error("ReasonCode: "+error.getReasonCode());
-				console.error("Source: "+error.getSource());
-				console.error(error);
-				callback(error);
-			}
-			else {
-				console.log("Lastest block:")
-				console.log(data[0]);
-				callback(null, data[0]);
-			}
-		});
-	}
-
-	methods.getBlock = function(id, callback) { //Id can be the slot or the hash of the block to retrieve
-		var requestData = {};
-		blockchain.Block.read(id, requestData
-			, function (error, data) {
-				if (error) {
-					console.error("HttpStatus: "+error.getHttpStatus());
-					console.error("Message: "+error.getMessage());
-					console.error("ReasonCode: "+error.getReasonCode());
-					console.error("Source: "+error.getSource());
-					console.error(error);
-					callback(error);
-				}
-				else {
-					console.log(data);
-					callback(null, data);
-				}
-			});
+	blockchain.Block.list(requestData, function (error, data) {
+		if (error) {
+			console.error("HttpStatus: "+error.getHttpStatus());
+			console.error("Message: "+error.getMessage());
+			console.error("ReasonCode: "+error.getReasonCode());
+			console.error("Source: "+error.getSource());
+			console.error(error);
+			callback(error);
 		}
-
-		methods.getEntry = function (hash, callback) {
-			var requestData = {
-				"hash": hash
-			};
-			blockchain.TransactionEntry.read("", requestData
-			, function (error, data) {
-				if (error) {
-					console.error("HttpStatus: "+error.getHttpStatus());
-					console.error("Message: "+error.getMessage());
-					console.error("ReasonCode: "+error.getReasonCode());
-					console.error("Source: "+error.getSource());
-					console.error(error);
-					callback(error);
-				}
-				else {
-					console.log("decoded:");
-					var decoded = msgClass.decode(new Buffer(data.value, 'hex'))
-					console.log(decoded);
-					var object = msgClass.toObject(decoded, {
-                longs: String,
-                enums: String,
-                bytes: String
-            });
-					console.log(object);
-					// console.log(data.hash);     //Output-->1e6fc898c0f0853ca504a29951665811315145415fa5bdfa90253efe1e2977b1
-					// console.log(data.slot);     //Output-->1503594631
-					// console.log(data.status);     //Output-->confirmed
-					// console.log(data.value);     //Output-->0a0f4d41393920446f63756d656e742031
-					callback(null, object);
-				}
-			});
+		else {
+			console.log("Lastest block:")
+			console.log(data[0]);
+			callback(null, data[0]);
 		}
+	});
+}
 
-		methods.base64toHex = function(input, callback) {
-			var requestData = {
-				"input": "hex",
-				"output": "base64",
-				"values": [input]
-			};
-			blockchain.Encoding.create(requestData
-				, function (error, data) {
-					if (error) {
-						console.error("HttpStatus: "+error.getHttpStatus());
-						console.error("Message: "+error.getMessage());
-						console.error("ReasonCode: "+error.getReasonCode());
-						console.error("Source: "+error.getSource());
-						console.error(error);
-						callback(error);
-					}
-					else {
-						console.log(data.values[0]);     //Output-->ChFFYW1vbiA2MCBEb2N1bWVudA==
-						callback(null, data);
-					}
-				});
-			}
+methods.getBlock = function(id, callback) { //Id can be the slot or the hash of the block to retrieve
+	var requestData = {};
+	blockchain.Block.read(id, requestData, function (error, data) {
+		if (error) {
+			console.error("HttpStatus: "+error.getHttpStatus());
+			console.error("Message: "+error.getMessage());
+			console.error("ReasonCode: "+error.getReasonCode());
+			console.error("Source: "+error.getSource());
+			console.error(error);
+			callback(error);
+		}
+		else {
+			console.log(data);
+			callback(null, data);
+		}
+	});
+}
 
-			initAPI();
+methods.getEntry = function (hash, callback) {
+	var requestData = {
+		"hash": hash
+	};
+	blockchain.TransactionEntry.read("", requestData, function (error, data) {
+		if (error) {
+			console.error("HttpStatus: "+error.getHttpStatus());
+			console.error("Message: "+error.getMessage());
+			console.error("ReasonCode: "+error.getReasonCode());
+			console.error("Source: "+error.getSource());
+			console.error(error);
+			callback(error);
+		}
+		else {
+			console.log("decoded:");
+			var decoded = msgClass.decode(new Buffer(data.value, 'hex'))
+			console.log(decoded);
+			var object = msgClass.toObject(decoded, {
+				longs: String,
+				enums: String,
+				bytes: String
+			});
+			console.log(object);
+			// console.log(data.hash);     //Output-->1e6fc898c0f0853ca504a29951665811315145415fa5bdfa90253efe1e2977b1
+			// console.log(data.slot);     //Output-->1503594631
+			// console.log(data.status);     //Output-->confirmed
+			// console.log(data.value);     //Output-->0a0f4d41393920446f63756d656e742031
+			callback(null, object);
+		}
+	});
+}
 
-			module.exports = methods;
+methods.base64toHex = function(input, callback) {
+	var requestData = {
+		"input": "hex",
+		"output": "base64",
+		"values": [input]
+	};
+	blockchain.Encoding.create(requestData, function (error, data) {
+		if (error) {
+			console.error("HttpStatus: "+error.getHttpStatus());
+			console.error("Message: "+error.getMessage());
+			console.error("ReasonCode: "+error.getReasonCode());
+			console.error("Source: "+error.getSource());
+			console.error(error);
+			callback(error);
+		}
+		else {
+			console.log(data.values[0]);     //Output-->ChFFYW1vbiA2MCBEb2N1bWVudA==
+			callback(null, data);
+		}
+	});
+}
+
+initAPI();
+
+module.exports = methods;
