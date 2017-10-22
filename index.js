@@ -22,6 +22,8 @@ const owners = require('./JSON/Owners.json');
 
 const blockchain = require('./blockchain');
 
+var loggedInUser = -1; //initiate to not logged in
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.set('view engine', 'pug');
@@ -361,25 +363,11 @@ app.post('/gift',(req,res)=>{
 
 
 app.post('/login',(req,res)=>{
+	console.log(req.body);
+		console.log(req.params);
+			console.log(req.query);
 
-	var rewards2 = Rewards({
-		username: 'Krittin',
-		userID: 2,
-		bank: 'Bank 1',
-		item: 'iPhone X',
-		hash: 'hiodfhoiew',
-		slotNumber: '73678126378921'
-	});
-
-	// save the user
-	rewards2.save(function(err) {
-		if (err) throw err;
-
-		console.log('User created!');
-	});
-
-	console.log('Logging in');
-	res.send()
+	res.send('ok');
 })
 
 //Search

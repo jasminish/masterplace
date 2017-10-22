@@ -40,14 +40,11 @@ html(lang="en")
     |
     div
       div(style="position:fixed; top:200px; left: 50%;")
-        form
+        form(action="/login", method="post")
           .form-group
-            input.form-control(placeholder="username")
-          |
-          .form-group
-            input.form-control(placeholder="password", type="password")
-          |
-          a.btn.btn-default(style="text-align:right;", href="mainplace.html") Login
+            input.form-control(placeholder="username", name="username")
+            input.form-control(placeholder="password", type="password", name="password")
+            input.form-control(type="Submit", value="Login")
       |
       img(src="images/login_page.jpg", width="970", align="middle")
     // /.container
