@@ -12,21 +12,23 @@ var keyAlias = config.KEY_ALIAS;   // For production: change this to the key ali
 var keyPassword = config.KEY_PASSWORD;   // For production: change this to the key alias you chose when you created your production key
 var appID = "TM25";
 
-// users 
+// users
 var users = JSON.parse(fs.readFileSync('./JSON/Users.json', 'utf8'))
 var NodeRSA = require('node-rsa');
 users.forEach(function(user) {
-	// generate RSA keypair 
+	// generate RSA keypair
 	var key = new NodeRSA({b: 256});
 	user.rsakey = key; // stored just for testing
 });
 
 
 
-// protobuf 
+// protobuf
 var protobuf = require('protobufjs');
 var protoFile = 'message.proto';
 var encoding = 'base64';
+
+var methods = {};
 
 function initAPI() {
 	console.log("initializing");
@@ -41,7 +43,7 @@ function initAPI() {
 	// loadData();
 }
 
-var msgClass; 
+var msgClass;
 function loadProtobuf() {
 	protobuf.load(protoFile, function(err, root) {
 		console.log('loading protobuf');
@@ -69,21 +71,19 @@ function loadProtobuf() {
 				console.error("Source: "+error.getSource());
 				console.error(error)
 			}
-			
+
 		});
 	});
 }
 
-initAPI(); 
-
-function createEntry() {
-	console.log("create entry"); 
+methods.createEntry = function createEntry() {
+	console.log("create entry");
 	var payload = {
-		reference: "EXAMPLE MESSAGE", 
-		owner_pk: users[0].rsakey.exportKey('public'), 
-		recipient_pk: users[1].rsakey.exportKey('public'), 
+		reference: "EXAMPLE MESSAGE",
+		owner_pk: users[0].rsakey.exportKey('public'),
+		recipient_pk: users[1].rsakey.exportKey('public'),
 		type: 0
-	}; 
+	};
 	var err = msgClass.verify(payload);
 	if (err) {
 		console.log(msgClass, err);
@@ -92,7 +92,7 @@ function createEntry() {
 		blockchain.TransactionEntry.create({
 			"app": appID,
 			"encoding": encoding,
-			"value": msgClassDef.encode(message).finish().toString(encoding)
+			"value": msgClass.encode(message).finish().toString(encoding)
 		}, function(err, result) {
 			if (err) {
 				console.log('error', err);
@@ -101,7 +101,7 @@ function createEntry() {
 			}
 		});
 	}
-	
+
 }
 
 function getProperties(obj) {
@@ -114,4 +114,6 @@ function getProperties(obj) {
     return ret;
 }
 
-createEntry();
+initAPI();
+
+module.exports = methods;

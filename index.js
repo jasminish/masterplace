@@ -13,6 +13,8 @@ const userData = require('./JSON/Users.json');
 const rewardsCat = require('./JSON/RewardsCat.json');
 const owners = require('./JSON/Owners.json');
 
+const blockchain = require('./blockchain');
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -20,6 +22,12 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.get('/',(req,res)=>{
 	console.log('hi');
 	res.sendFile(path.join(__dirname+'/test.html'));
+})
+
+// Get blocks
+app.get('/blockchain', (req, res) => {
+	blockchain.createEntry();
+	res.send('OK');
 })
 
 app.post('/login',(req,res)=>{
@@ -50,5 +58,5 @@ app.listen(port,()=>{
 	console.log(`Node server started on Port ${port} at `, Date());
 });
 
-function retrieveSearchResults (){ 
+function retrieveSearchResults (){
 }
