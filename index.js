@@ -58,10 +58,13 @@ app.post('/entry', (req, res) => {
 	var recipient_id = req.body.recipient_id;
 	var num = null;
 	var type = '';
-
+	
 	if (req.body.object_id) {
 		type = 'item';
 		num = req.body.object_id;
+		if (owner_id != methods.checkOwner(num)) {
+			return res.send(400);
+		}
 	} else if (req.body.points) {
 		type = 'points';
 		num = req.body.points;

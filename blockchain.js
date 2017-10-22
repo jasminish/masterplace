@@ -70,36 +70,30 @@ function loadProtobuf() {
 	});
 }
 
+const {Items} = require('./db/models/Items.js');
 methods.createEntry = function createEntry(owner_id, recipient_id, transaction_type, num, callback) {
 	console.log("create entry");
-	var payload;
+	var payload = {
+		ownerpk: users[owner_id].rsakey.exportKey('public'),
+		recipientpk: users[recipient_id].rsakey.exportKey('public'),
+		item: "",
+		points: "", 
+		miles: "",
+		signature: users[owner_id].rsakey.sign(num, 'base64'),
+		lastHash: ""
+	};
 	if (transaction_type == "item") {
-		payload = {
-			ownerpk: users[owner_id].rsakey.exportKey('public'),
-			recipientpk: users[recipient_id].rsakey.exportKey('public'),
-			item: num,
-			points: "", 
-			miles: "",
-			signature: users[owner_id].rsakey.sign(num, 'base64')
-		};
+		payload.item = num;
+		var lastHash = Items.findOne({'id': num}, 'lastHash', function(err, item) {
+			return item.lastHash; 
+		});
+		if (lastHash) {
+			payload.lastHash = lastHash;
+		}
 	} else if (transaction_type == "points") {
-		payload = {
-			ownerpk: users[owner_id].rsakey.exportKey('public'),
-			recipientpk: users[recipient_id].rsakey.exportKey('public'),
-			item: "",
-			points: num,
-			miles: "",
-			signature: users[owner_id].rsakey.sign(num, 'base64')
-		};
+		payload.points = num;
 	} else if (transaction_type == "miles") {
-		payload = {
-			ownerpk: users[owner_id].rsakey.exportKey('public'),
-			recipientpk: users[recipient_id].rsakey.exportKey('public'),
-			item: "",
-			points: "",
-			miles: num, 
-			signature: users[owner_id].rsakey.sign(num, 'base64')
-		};
+		payload.miles = num;
 	} else {
 		console.log('wrong transaction type');
 	}
@@ -199,9 +193,17 @@ methods.getEntry = function (hash, callback) {
 	});
 }
 
-methods.something = function() {
-	
-	
+methods.checkOwner = function(item_id) {
+	var i = Items.findOne({'id': num}, 'lastHash ownerID', function(err, item) {
+		return item; 
+	});
+	if (i.lastHash) {
+		methods.getEntry(hash, function(err, data) {
+			return data.recipientpk;
+		});
+	} else {
+		return i.ownerID; // company ID s
+	}
 };
 
 
