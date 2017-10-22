@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const objectID = require('objectid');
 //const {User} = require('./db/model/users.js');
 
 const app = express();
@@ -31,8 +32,16 @@ app.get('/blockchain', (req, res) => {
 })
 
 app.post('/login',(req,res)=>{
-	console.log(req.body.username);
-	console.log(req.body.password);
+	var rewards = new Rewards('Gabriel','Bank 1','iPhone X','djksfhlkasdf', "2131243561");
+	console.log(rewards);
+	rewards.save((err)=>{
+		if(err){
+			console.log("Error ",err);
+		} else {
+			console.log('saved');
+		}
+	})
+
 	console.log('Logging in');
 	res.send()
 })
