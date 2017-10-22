@@ -6,13 +6,12 @@ const path = require('path');
 const app = express();
 const port = process.env.port || 3000;
 
+const {mongoose} = require('./db/mongoose.js');
+const {Rewards} = require('./db/models/Rewards.js')
+
 const userData = require('./JSON/Users.json');
 const rewardsCat = require('./JSON/RewardsCat.json');
 const owners = require('./JSON/Owners.json');
-
-console.log(userData);
-console.log(rewardsCat);
-console.log(owners);
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
