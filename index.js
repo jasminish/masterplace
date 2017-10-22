@@ -363,9 +363,8 @@ app.post('/gift',(req,res)=>{
 
 
 app.post('/login',(req,res)=>{
-	console.log(req.body);
-		console.log(req.params);
-			console.log(req.query);
+	var username = req.body.username;
+	console.log(req.body.password);
 
 	res.send('ok');
 })
@@ -383,6 +382,10 @@ app.post('/postEntry',(req,res)=>{
 
 	createEntry(owner_id, recipient_id, object_id);
 
+})
+
+app.get('/test',(req,res)=>{
+	res.sendFile(path.join(__dirname+'/views/staticHTML/redeem.html'));
 })
 
 
