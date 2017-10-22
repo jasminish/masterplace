@@ -1,0 +1,135 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    |
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    |
+    meta(name="description", content="")
+    |
+    meta(name="author", content="")
+    |
+    |
+    title MasterPlace
+    // Bootstrap core CSS
+    link(href="vendor/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+    // Custom styles for this template
+    link(href="css/modern-business.css", rel="stylesheet")
+    |
+    link(href="css/www_rate_calc_frame.css", rel="stylesheet", title="stylesheet", type="text/css")
+  body
+    // Navigation
+    nav.navbar.fixed-top.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
+      .container
+        a.navbar-brand(href="mainplace.html") MasterPlace
+        |
+        button.navbar-toggler.navbar-toggler-right(type="button", data-toggle="collapse", data-target="#navbarResponsive", aria-controls="navbarResponsive", aria-expanded="false", aria-label="Toggle navigation")
+          span.navbar-toggler-icon
+        |
+        #navbarResponsive.collapse.navbar-collapse
+          ul.navbar-nav.ml-auto
+            li.nav-item
+              input(type="text", name="search", placeholder="Search Rewards")
+            |
+            li.nav-item
+              a.nav-link(href="contact.html") Support
+            |
+            li.nav-item.dropdown
+              a.nav-link(href="#") Blog
+            |
+            li.nav-item.dropdown
+              a.nav-link(href="#") Log In
+    // Profile
+    .profile
+      img(src="images/nelsonProfile.png", width="200", height="400", align="right")
+    |
+    |
+    #powerd
+      a#tm_add146.tm_add146(href="https://www.transfermate.com/", target="_blank")
+    script(src="https://www.transfermate.com/en/exchange_rates_api.asp", type="text/javascript")
+    noscript
+      br
+      span(style="color: red;") Please enable your javascript.
+    |
+    |
+    style.
+      /* The Modal (background) */
+      .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      }
+      /* Modal Content */
+      .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      }
+      /* The Close Button */
+      .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      }
+      .close:hover,
+      .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+      }
+    body
+      h2 Modal Example
+      // Trigger/Open The Modal
+      #myBtn
+        img(src="images/Rewards_Details_AMC_button.png", width="800", height="400")
+      // The Modal
+      #myModal.modal
+        // Modal content
+        .modal-content
+          span.close ×
+          |
+          p Your points have been redeemed!
+      |
+      |
+      script.
+        // Get the modal
+        var modal = document.getElementById('myModal');
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        // When the user clicks the button, open the modal
+        btn.onclick = function() {
+        modal.style.display = "block";
+        }
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+        location.href = "mainplace.html";
+        };
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+        if (event.target == modal) {
+        modal.style.display = "none";
+        }
+        }
+      // /.container
+      // Footer
+      // Bootstrap core JavaScript
+      script(src="vendor/jquery/jquery.min.js")
+      |
+      script(src="vendor/bootstrap/js/bootstrap.bundle.min.js")
+      |
+      script(src="assets/js/vendor/jquery-1.11.2.min.js")
+      |
+      script(src="assets/js/vendor/bootstrap.min.js")

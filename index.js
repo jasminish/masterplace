@@ -24,11 +24,28 @@ const blockchain = require('./blockchain');
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.set('view engine', 'pug');
+app.set('views', './views')
 
 //Home Page
 app.get('/',(req,res)=>{
-	console.log('hi');
-	res.sendFile(path.resolve('views', 'index.html'));
+	res.render('index');
+})
+
+app.get('/mainplace.html',(req,res)=>{
+	res.render('mainplace');
+})
+
+app.get('/login.html',(req,res)=>{
+	res.render('login');
+})
+
+app.get('/redeem.html',(req,res)=>{
+	res.render('redeem');
+})
+
+app.get('/redeemlist.html',(req,res)=>{
+	res.render('redeemlist');
 })
 
 // Get latest confirmed block
