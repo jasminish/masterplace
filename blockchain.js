@@ -10,15 +10,6 @@ var keyAlias = config.KEY_ALIAS;   // For production: change this to the key ali
 var keyPassword = config.KEY_PASSWORD;   // For production: change this to the key alias you chose when you created your production key
 var appID = "TM25";
 
-// users
-var users = JSON.parse(fs.readFileSync('./JSON/Users.json', 'utf8'))
-var NodeRSA = require('node-rsa');
-users.forEach(function(user) {
-	// generate RSA keypair
-	var key = new NodeRSA({b: 1024});
-	user.rsakey = key; // stored just for testing
-});
-
 // protobuf
 var protobuf = require('protobufjs');
 var protoFile = 'message.proto';
@@ -75,8 +66,8 @@ methods.createEntry = function createEntry(owner_id, recipient_id, transaction_t
 	console.log("create entry");
 	console.log(owner_id, recipient_id, transaction_type, num);
 	var payload = {
-		ownerpk: users[owner_id].rsakey.exportKey('public'),
-		recipientpk: users[recipient_id].rsakey.exportKey('public'),
+		ownerid: owner_id,
+		recipientid: recipient_id,
 		item: "",
 		points: "",
 		miles: "",

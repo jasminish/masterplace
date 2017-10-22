@@ -5,11 +5,10 @@ option java_package = "com.mastercard.blockchain";
 option java_outer_classname = "BarebonesProtocolBuffer";
 
 message Transaction {
-	string ownerpk = 1;     // owner public key
-	string recipientpk = 2; // recipient public key
+	string ownerid = 1;     
+	string recipientid = 2; 
 	string item = 3;    // unique object id
 	string points = 4; 
 	string miles = 5; 
-	string signature = 6;    // signature of owner 
-	string lastHash = 7; 
+	string lastHash = 6; 
 }
