@@ -285,7 +285,7 @@ input[type=text]:focus {
 }
 
 .cardList{
-    padding-left: 20px;
+    padding-left: 15px;
 }
 
 .cardList img{
@@ -294,7 +294,7 @@ input[type=text]:focus {
 
 .pointAmt{
     padding-left: 10px;
-    font-size: 20px;
+    font-size: 13px;
 }
 
 .bladerunner{
