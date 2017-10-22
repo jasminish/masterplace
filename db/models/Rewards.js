@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
+var Schema = mongoose.Schema;
 
 var rewardSchema = new mongoose.Schema({
 	user: {
 		type: String
+	},
+	userID:{
+		type: Number
 	},
 	bank: {
 		type: String

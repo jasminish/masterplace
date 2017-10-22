@@ -32,15 +32,22 @@ app.get('/blockchain', (req, res) => {
 })
 
 app.post('/login',(req,res)=>{
-	var rewards = new Rewards('Gabriel','Bank 1','iPhone X','djksfhlkasdf', "2131243561");
-	console.log(rewards);
-	rewards.save((err)=>{
-		if(err){
-			console.log("Error ",err);
-		} else {
-			console.log('saved');
-		}
-	})
+
+	var rewards2 = Rewards({
+	  name: 'Gabriel',
+	  userID: 1,
+	  bank: 'Bank 1',
+	  item: 'iPhone X',
+	  hash: 'djksfhlkasdf',
+	  slotNumber: '2131243561'
+	});
+
+	// save the user
+	rewards2.save(function(err) {
+	  if (err) throw err;
+
+	  console.log('User created!');
+	});
 
 	console.log('Logging in');
 	res.send()
