@@ -24,10 +24,32 @@ app.get('/',(req,res)=>{
 	res.sendFile(path.join(__dirname+'/test.html'));
 })
 
-// Get blocks
+// Get latest confirmed block
 app.get('/blockchain', (req, res) => {
-	blockchain.getLastConfirmedBlock();
-	res.send('OK');
+	blockchain.getLastConfirmedBlock((err, data) => {
+		res.send(data);
+	});
+})
+
+app.get('/block/:id', (req, res) => {
+	var id = req.params.id;
+	blockchain.getBlock(id, (err, data) => {
+		if (err) return res.send(404);
+		res.send(data);
+	});
+})
+
+app.post('/block', (req, res) => {
+	console.log('creating transaction entry');
+	console.log(req.body);
+	owner_id = req.body.owner_id;
+	recipient_id = req.body.recipient_id;
+	object_id = req.body.object_id;
+
+	blockchain.createEntry(owner_id, recipient_id, object_id, (err, data) => {
+		if (err) return res.send('Unable to create entry');
+		res.send(data);
+	});
 })
 
 app.post('/login',(req,res)=>{
