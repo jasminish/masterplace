@@ -199,28 +199,28 @@ app.post('/transferPoints', (req, res) => {
 
 				// get recipient hash
 				Users.findOne({userID: recipient_id}, function(err, document) {
-						if (!document) return console.log("recipient not found");
+					if (!document) return console.log("recipient not found");
 
-						var hash = (recipient_bank == 'bankA' ? document.bankA : document.bankB);
-						// get recipient points
-						blockchain.getEntry(hash, (err, data) => {
-							// add entry to recipient
-							blockchain.createEntry(owner_id, recipient_id, 'points', (parseInt(data.points) + parseInt(transfer_points)).toString(), hash, (err, data) => {
-								if (err) return console.log('err creating entry for recipient');
+					var hash = (recipient_bank == 'bankA' ? document.bankA : document.bankB);
+					// get recipient points
+					blockchain.getEntry(hash, (err, data) => {
+						// add entry to recipient
+						blockchain.createEntry(owner_id, recipient_id, 'points', (parseInt(data.points) + parseInt(transfer_points)).toString(), hash, (err, data) => {
+							if (err) return console.log('err creating entry for recipient');
 
-								console.log("Created new entry for recipient:", data.hash);
-								// update db
-								if (recipient_bank == 'bankA') {
-									Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankA: data.hash.toString()}}, {upsert: true}, (err, data) =>{
-										console.log(err || data);
-									});
-								} else {
-									Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankB: data.hash.toString()}}, {upsert: true}, (err, data) =>{
-										console.log(err || data);
-									});
-								}
-							});
-						})
+							console.log("Created new entry for recipient:", data.hash);
+							// update db
+							if (recipient_bank == 'bankA') {
+								Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankA: data.hash.toString()}}, {upsert: true}, (err, data) =>{
+									console.log(err || data);
+								});
+							} else {
+								Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankB: data.hash.toString()}}, {upsert: true}, (err, data) =>{
+									console.log(err || data);
+								});
+							}
+						});
+					})
 
 				})
 			})
@@ -266,28 +266,28 @@ app.post('/transferMiles', (req, res) => {
 
 				// get recipient hash
 				Users.findOne({userID: recipient_id}, function(err, document) {
-						if (!document) return console.log("recipient not found");
+					if (!document) return console.log("recipient not found");
 
-						var hash = (recipient_airline == 'airlineA' ? document.airlineA : document.airlineB);
-						// get recipient points
-						blockchain.getEntry(hash, (err, data) => {
-							// add entry to recipient
-							blockchain.createEntry(owner_id, recipient_id, 'miles', (parseInt(data.miles) + parseInt(transfer_miles)).toString(), hash, (err, data) => {
-								if (err) return console.log('err creating entry for recipient');
+					var hash = (recipient_airline == 'airlineA' ? document.airlineA : document.airlineB);
+					// get recipient points
+					blockchain.getEntry(hash, (err, data) => {
+						// add entry to recipient
+						blockchain.createEntry(owner_id, recipient_id, 'miles', (parseInt(data.miles) + parseInt(transfer_miles)).toString(), hash, (err, data) => {
+							if (err) return console.log('err creating entry for recipient');
 
-								console.log("Created new entry for recipient:", data.hash);
-								// update db
-								if (recipient_airline == 'airlineA') {
-									Users.findOneAndUpdate({userID: recipient_id}, {$set: {airlineA: data.hash.toString()}}, {upsert: true}, (err, data) =>{
-										console.log(err || data);
-									});
-								} else {
-									Users.findOneAndUpdate({userID: recipient_id}, {$set: {airlineB: data.hash.toString()}}, {upsert: true}, (err, data) =>{
-										console.log(err || data);
-									});
-								}
-							});
-						})
+							console.log("Created new entry for recipient:", data.hash);
+							// update db
+							if (recipient_airline == 'airlineA') {
+								Users.findOneAndUpdate({userID: recipient_id}, {$set: {airlineA: data.hash.toString()}}, {upsert: true}, (err, data) =>{
+									console.log(err || data);
+								});
+							} else {
+								Users.findOneAndUpdate({userID: recipient_id}, {$set: {airlineB: data.hash.toString()}}, {upsert: true}, (err, data) =>{
+									console.log(err || data);
+								});
+							}
+						});
+					})
 
 				})
 			})
@@ -363,11 +363,12 @@ app.post('/gift',(req,res)=>{
 
 
 app.post('/login',(req,res)=>{
-	console.log(req.body);
-		console.log(req.params);
-			console.log(req.query);
-
-	res.send('ok');
+	var username = req.body.username;
+	Users.findOne({userID: username}, function(err, document) {
+		if (!document) { return res.render('login'); }
+			loggedInUser = username;
+			res.render('mainplace', {user: document});
+	});
 })
 
 //Search
