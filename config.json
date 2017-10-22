@@ -1,0 +1,6 @@
+{
+	"CONSUMER_KEY": "tlH4l-IGqeWEq4I2kqY4UJf0SgyE3D7tHIBi6fuG5c135ef2!dc3f02f18c904bbe9deb0b5c7b1614dd0000000000000000",
+	"KEYSTORE_PATH": "./key.p12",
+	"KEY_ALIAS": "keyalias",
+	"KEY_PASSWORD": "keystorepassword"
+}
