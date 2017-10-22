@@ -119,39 +119,45 @@ app.post('/redeem', (req, res) => {
 	console.log('redeeming items from points', req.body);
 	var bank_id = req.body.owner_id;
 	var recipient_id = req.body.recipient_id;
-	var points = req.body.points;
+	var points = parseInt(req.body.points);
 	var item_id = req.body.item_id;
 
 	Users.findOne({userID: recipient_id}, function(err, document) {
 		if (!document) return console.log("user not found");
 
 		// helper
-		var deductMiles = function(data) {
-			blockchain.createEntry(recipient_id, bank_id, 'points', parseInt(data.points) - points, data.hash, (err, data) => {
+		var deductPoints = function(data) {
+			blockchain.createEntry(recipient_id, bank_id, 'points', (parseInt(data.points) - points).toString(), data.hash, (err, data1) => {
+				console.log ( err || data1 );
 				// save last hash back to user
 				if (bank_id == 'bankA') {
-					Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankA: data.hash.toString()}}, {upsert: true}, (err, data) => {
+					Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankA: data1.hash.toString()}}, {upsert: true}, (err, data) => {
 						console.log(err || data);
+						loggedInUserData.bankA_points -= points;
 					});
 				} else {
-					Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankB: data.hash.toString()}}, {upsert: true}, (err, data) => {
+					console.log("deducting pts...")
+					Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankB: data1.hash.toString()}}, {upsert: true}, (err, data) => {
 						console.log(err || data);
+						if (data) console.log('pts deducted');
+						loggedInUserData.bankB_points -= points;
 					});
 				}
 			});
 		}
 
 		// check points and deduct
-		if (bank_id == bankA) {
+		if (bank_id == 'bankA') {
 			blockchain.getEntry(document.bankA, (err, data) => {
-				if (parseInt(data.points >= points)) {
-					deductMiles(data);
+				if (parseInt(data.points) >= points) {
+					deductPoints(data);
 				}
 			})
 		} else {
 			blockchain.getEntry(document.bankB, (err, data) => {
-				if (parseInt(data.points >= points)) {
-					deductMiles(data);
+				console.log("my points: ", data.points);
+				if (parseInt(data.points) >= points) {
+					deductPoints(data);
 				}
 			})
 		}
