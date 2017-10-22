@@ -35,7 +35,13 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/mainplace.html',(req,res)=>{
-	res.render('mainplace');
+	if (loggedInUser == -1) {
+		return res.render('login');
+	}
+	fetchUserDetails(loggedInUser, (data) => {
+		if (null) return res.render('login');
+		res.render('mainplace', {user: data});
+	})
 })
 
 app.get('/login.html',(req,res)=>{
@@ -43,11 +49,23 @@ app.get('/login.html',(req,res)=>{
 })
 
 app.get('/redeem.html',(req,res)=>{
-	res.render('redeem');
+	if (loggedInUser == -1) {
+		return res.render('login');
+	}
+	fetchUserDetails(loggedInUser, (data) => {
+		if (null) return res.render('login');
+		res.render('redeem', {user: data});
+	})
 })
 
 app.get('/redeemlist.html',(req,res)=>{
-	res.render('redeemlist');
+	if (loggedInUser == -1) {
+		return res.render('login');
+	}
+	fetchUserDetails(loggedInUser, (data) => {
+		if (null) return res.render('login');
+		res.render('redeemlist', {user: data});
+	})
 })
 
 // Get latest confirmed block
@@ -361,11 +379,9 @@ app.post('/gift',(req,res)=>{
 	// })
 })
 
-
-app.post('/login',(req,res)=>{
-	var username = req.body.username;
+function fetchUserDetails(username, callback) {
 	Users.findOne({userID: username}, function(err, document) {
-		if (!document) { return res.render('login'); }
+		if (!document) { return callback(null); }
 		loggedInUser = username;
 
 		//fetch points
@@ -377,11 +393,18 @@ app.post('/login',(req,res)=>{
 					document.airlineA_miles = data.miles;
 					blockchain.getEntry(document.airlineB, (err, data) => {
 						document.airlineB_miles = data.miles;
-						res.render('mainplace', {user: document});
+						callback(document);
 					})
 				})
 			});
 		})
+	})
+}
+
+app.post('/login',(req,res)=>{
+	var username = req.body.username;
+	fetchUserDetails(username, (data) => {
+		res.render('mainplace', {user: data});
 	})
 })
 
