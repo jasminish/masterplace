@@ -121,35 +121,59 @@ app.post('/redeem', (req, res) => {
 	var recipient_id = req.body.recipient_id;
 	var points = req.body.points;
 	var item_id = req.body.item_id;
-	var card_no = req.body.card_no;
 
 	Users.findOne({userID: recipient_id}, function(err, document) {
 		if (!document) return console.log("user not found");
-		console.log(document.bankInfo);
-		document.bankInfo.forEach((item) => {
-			if (item.cardNO == card_no) {
-				if (points <= item.rewardPoints) {
-					// create entry in blockchain
-					blockchain.createEntry(bank_id, recipient_id, 'item', item_id, null, (err, data) => {
-						if (err) return res.send('Unable to create entry');
-						console.log(data);
-						var item = Items({
-							itemID: item_id,
-							ownerID: bank_id,
-							lastHash: data.hash
-						});
 
-						item.save((err)=>{
-							if(err){
-								console.log('Error Adding Item To DB! ',err);
-							}else{
-								console.log('Adding Item to DB OK!');
-							}
-						})
-						res.send(data);
+		// helper
+		var deductMiles = function(data) {
+			blockchain.createEntry(recipient_id, bank_id, 'points', parseInt(data.points) - points, data.hash, (err, data) => {
+				// save last hash back to user
+				if (bank_id == 'bankA') {
+					Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankA: data.hash.toString()}}, {upsert: true}, (err, data) => {
+						console.log(err || data);
+					});
+				} else {
+					Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankB: data.hash.toString()}}, {upsert: true}, (err, data) => {
+						console.log(err || data);
 					});
 				}
-			}
+			});
+		}
+
+		// check points and deduct
+		if (bank_id == bankA) {
+			blockchain.getEntry(document.bankA, (err, data) => {
+				if (parseInt(data.points >= points)) {
+					deductMiles(data);
+				}
+			})
+		} else {
+			blockchain.getEntry(document.bankB, (err, data) => {
+				if (parseInt(data.points >= points)) {
+					deductMiles(data);
+				}
+			})
+		}
+
+		// create genesis entry for item
+		blockchain.createEntry(bank_id, recipient_id, 'item', item_id, null, (err, data) => {
+			if (err) return res.send('Unable to create entry');
+			console.log(data);
+			var item = Items({
+				itemID: item_id,
+				ownerID: recipient_id,
+				lastHash: data.hash
+			});
+
+			// save item movement in db
+			item.save((err)=>{
+				if(err){
+					console.log('Error Adding Item To DB! ',err);
+				}else{
+					console.log('Adding Item to DB OK!');
+				}
+			})
 		});
 	});
 })
