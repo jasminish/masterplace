@@ -366,9 +366,23 @@ app.post('/login',(req,res)=>{
 	var username = req.body.username;
 	Users.findOne({userID: username}, function(err, document) {
 		if (!document) { return res.render('login'); }
-			loggedInUser = username;
-			res.render('mainplace', {user: document});
-	});
+		loggedInUser = username;
+
+		//fetch points
+		blockchain.getEntry(document.bankA, (err, data) => {
+			document.bankA_points = data.points;
+			blockchain.getEntry(document.bankB, (err, data) => {
+				document.bankB_points = data.points;
+				blockchain.getEntry(document.airlineA, (err, data) => {
+					document.airlineA_miles = data.miles;
+					blockchain.getEntry(document.airlineB, (err, data) => {
+						document.airlineB_miles = data.miles;
+						res.render('mainplace', {user: document});
+					})
+				})
+			});
+		})
+	})
 })
 
 //Search
