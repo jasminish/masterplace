@@ -177,15 +177,47 @@ methods.getLastConfirmedBlock = function(callback) {
 					callback(error);
 				}
 				else {
-					console.log(data.hash);     //Output-->1e6fc898c0f0853ca504a29951665811315145415fa5bdfa90253efe1e2977b1
-					console.log(data.slot);     //Output-->1503594631
-					console.log(data.status);     //Output-->confirmed
-					console.log(data.value);     //Output-->0a0f4d41393920446f63756d656e742031
-					callback(null, data);
+					console.log("decoded:");
+					var decoded = msgClass.decode(new Buffer(data.value, 'hex'))
+					console.log(decoded);
+					var object = msgClass.toObject(decoded, {
+                longs: String,
+                enums: String,
+                bytes: String
+            });
+					console.log(object);
+					// console.log(data.hash);     //Output-->1e6fc898c0f0853ca504a29951665811315145415fa5bdfa90253efe1e2977b1
+					// console.log(data.slot);     //Output-->1503594631
+					// console.log(data.status);     //Output-->confirmed
+					// console.log(data.value);     //Output-->0a0f4d41393920446f63756d656e742031
+					callback(null, object);
 				}
 			});
 		}
 
-		initAPI();
+		methods.base64toHex = function(input, callback) {
+			var requestData = {
+				"input": "hex",
+				"output": "base64",
+				"values": [input]
+			};
+			blockchain.Encoding.create(requestData
+				, function (error, data) {
+					if (error) {
+						console.error("HttpStatus: "+error.getHttpStatus());
+						console.error("Message: "+error.getMessage());
+						console.error("ReasonCode: "+error.getReasonCode());
+						console.error("Source: "+error.getSource());
+						console.error(error);
+						callback(error);
+					}
+					else {
+						console.log(data.values[0]);     //Output-->ChFFYW1vbiA2MCBEb2N1bWVudA==
+						callback(null, data);
+					}
+				});
+			}
 
-		module.exports = methods;
+			initAPI();
+
+			module.exports = methods;
