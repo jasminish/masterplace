@@ -290,5 +290,5 @@ function updatingUsersDB(giver_id, recipient_id, transactionType,cardNO,item_id)
 	var recipientCondition = {userID: recipient_id};
 	var recipientInfo = retrieveUserInfo(recipient_id);
 
-	User.update({_id: "59ec4e1cdd623c12cb680161"},{$push: {'bankInfo.$.cardNO': 5555555}},(err)=>{});
+	User.update({_id: "59ec4e1cdd623c12cb680161","BankInfo.cardNO":690783476732502},{$push: {'bankInfo.$.rewardPoints': 5555555}},(err)=>{});
 }
