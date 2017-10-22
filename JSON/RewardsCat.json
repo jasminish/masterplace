@@ -1,0 +1,39 @@
+{
+	"Bank 1": {
+		"United (Mileage)": 2,
+		"Delta (Mileage)": 3,
+		"Singapore Airlines (Mileage)": 2,
+		"Starbuck Gift Card ($10.00)": 200,
+		"Amazon Gift Card ($10.00)": 250,
+		"Master Card Gift Card ($10.00)": 500,
+		"1 Night Stay @ Any Four Seasons Hotels": 4000,
+		"Sony Playstation 4": 6000,
+		"iPhone X": 50000,
+		"Bose Headphones QC35": 5500
+	},
+	"Bank 2": {
+		"United (Mileage)": 2,
+		"Delta (Mileage)": 2,
+		"Singapore Airlines (Mileage)": 3,
+		"Starbuck Gift Card ($10.00)": 250,
+		"Amazon Gift Card ($10.00)": 220,
+		"Master Card Gift Card ($10.00)": 530,
+		"1 Night Stay @ Any Four Seasons Hotels": 4500,
+		"Sony Playstation 4": 5300,
+		"iPhone X": 65000,
+		"Bose Headphones QC35": 5200
+	},
+	"Bank 3": {
+		"United (Mileage)": 1,
+		"Delta (Mileage)": 1,
+		"Singapore Airlines (Mileage)": 2,
+		"Starbuck Gift Card ($10.00)": 220,
+		"Amazon Gift Card ($10.00)": 230,
+		"Master Card Gift Card ($10.00)": 550,
+		"1 Night Stay @ Any Four Seasons Hotels": 4700,
+		"Sony Playstation 4": 5200,
+		"iPhone X": 67000,
+		"Bose Headphones QC35": 5300
+	}
+
+}

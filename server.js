@@ -7,8 +7,12 @@ const app = express();
 const port = process.env.port || 3000;
 
 const userData = require('./JSON/Users.json');
+const rewardsCat = require('./JSON/RewardsCat.json');
+const owners = require('./JSON/Owners.json');
 
 console.log(userData);
+console.log(rewardsCat);
+console.log(owners);
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -29,7 +33,16 @@ app.post('/login',(req,res)=>{
 //Search
 app.get('/search',(req,res)=>{
 	console.log('Loading a search page.');
-	console.log(userData)
+	console.log(userData);
+})
+
+app.post('/postEntry',(req,res)=>{
+	var owner_id = req.body.owner_id;
+	var recipient_id = req.body.recipient_id;
+	var object_id = req.body.object_id;
+
+	createEntry(owner_id, recipient_id, object_id);x
+
 })
 
 
