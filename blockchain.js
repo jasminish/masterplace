@@ -71,12 +71,8 @@ methods.createEntry = function createEntry(owner_id, recipient_id, transaction_t
 		item: "",
 		points: "",
 		miles: "",
-<<<<<<< HEAD
 		signature: users[owner_id].rsakey.sign(num, 'base64'),
 		lastHash: lastHash || ""
-=======
-		lastHash: ""
->>>>>>> update messageproto & remove rsa
 	};
 	if (transaction_type == "item") {
 		payload.item = num;

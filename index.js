@@ -77,13 +77,9 @@ app.post('/entry', (req, res) => {
 	console.log('creating transaction entry: ', type);
 	blockchain.createEntry(owner_id, recipient_id, type, num, (err, data) => {
 		if (err) return res.send(400);
-<<<<<<< HEAD
 		if (type == "item") {
 			updatingItemsDB(num, data.hash, recipient_id);
 		}
-=======
-		console.log(data, num);
->>>>>>> update messageproto & remove rsa
 		res.send(data);
 	})
 })
