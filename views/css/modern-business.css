@@ -275,7 +275,26 @@ input[type=text]:focus {
 }
 
 .profile{
+    width: 200px; 
+    height: 400px;
+    background-color: white; 
+    position: absolute; 
+    right: 0; 
+    z-index: 20;
+    border: solid 1px #9e9e9e;
+}
 
+.cardList{
+    padding-left: 20px;
+}
+
+.cardList img{
+    width: 100px;
+}
+
+.pointAmt{
+    padding-left: 10px;
+    font-size: 20px;
 }
 
 .bladerunner{

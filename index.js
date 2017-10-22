@@ -386,6 +386,10 @@ app.post('/postEntry',(req,res)=>{
 
 })
 
+app.get('/test',(req,res)=>{
+	res.sendFile(path.join(__dirname+'/views/staticHTML/redeem.html'));
+})
+
 
 
 app.listen(port,()=>{
