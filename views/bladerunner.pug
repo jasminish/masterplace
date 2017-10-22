@@ -59,33 +59,6 @@ html(lang="en")
                 a.dropdown-item(href="404.html") 404
                 |
                 a.dropdown-item(href="pricing.html") Pricing Table
-    // Profile
-    .profile(align="right")
-      ul#user(style="left: 40px; text-align: left;margin-top: 40px; padding-left: 20px; margin-bottom: 20px;font-size: 20px")
-        img(src="http://www.piedpiper.com/app/themes/pied-piper/dist/images/bighead.png", width="60px")
-        |  #{user.userName}
-      |
-      hr
-      |
-      ul#card1.cardList(style="text-align: left")
-        img(src="https://www.key.com/kco/images/apply-keybank-mastercard-large.png", width="100px")
-        a#card1Point.pointAmt #{user.bankA_points} pts
-      |
-      |
-      ul#card1.cardList(style="text-align: left")
-        img(src="https://www.citi.com/CRD/images/card_no_reflection/citi-secured-credit-card.jpg")
-        a#card2Point.pointAmt #{user.bankB_points} pts
-      |
-      |
-      ul#card1.cardList(style="text-align: left")
-        img(src="https://www.suntrust.com/Static/Images/personal-banking/card-art/check-cards/debit-delta-skymiles-world-mastercard-651x412.png")
-        a#card3Point.pointAmt #{user.airlineA_miles} miles
-      |
-      |
-      ul#card1.cardList(style="text-align: left")
-        img(src="https://www.barclaycardus.com/apply/img/lft/lftCardArtMNM.png")
-        a#card3Point.pointAmt #{user.airlineB_miles} miles
-    |
     |
     style.
       /* The Modal (background) */
@@ -123,16 +96,44 @@ html(lang="en")
       text-decoration: none;
       cursor: pointer;
       }
+      form{
+      margin-top: 0px;
+      }
+      #userOptions{
+        margin-right: 50px;
+      }
     body
       style.
         h2 {
-        padding-left:110px;
-        padding-top:30px;
+        padding-left:100px;
+        padding-top:100px;
+        float:left;
         }
-      h2 My Rewards
-      a(href='./bladerunner.html')
-        img(src="images/bladeRunner.png")
-      img(src="images/Rewards1.png")
+
+        h1{
+          font-size: 20px;
+          margin-top: 100px;
+          padding-top:100px;
+          margin-right: 100px;
+        }
+        img{
+        padding-left:100px;
+        padding-top:50px;
+        float:left;
+        }
+      img(src="images/bladeRunner.png")
+      h2
+        p Blade Runner
+        p
+          h1 Choose whom you want to transfer your rewards to below
+            form(action='/transferItem', method='post')
+              .form-group
+                input(type="hidden" name="owner_id" value="1")
+                input(type="hidden" name="item_id" value="123")
+                select(name='recipient_id' id='userOptions')
+                 option(value='3') Jasmine
+                 option(value='2') Randy
+                input(type='submit', name='Users')
       // /.container
       // Footer
       // Bootstrap core JavaScript

@@ -42,6 +42,13 @@ app.get('/myrewards.html',(req,res)=>{
 	res.render('myrewards', {user: loggedInUserData});
 })
 
+app.get('/bladerunner.html',(req,res)=>{
+	if (loggedInUser == -1 || !loggedInUserData) {
+		return res.render('login');
+	}
+	res.render('bladerunner', {user: loggedInUserData});
+})
+
 app.get('/mainplace.html',(req,res)=>{
 	if (loggedInUser == -1 || !loggedInUserData) {
 		return res.render('login');
@@ -135,7 +142,7 @@ app.post('/redeem', (req, res) => {
 		// helper
 		var deductPoints = function(data) {
 			blockchain.createEntry(recipient_id, bank_id, 'points', (parseInt(data.points) - points).toString(), data.hash, (err, data1) => {
-				console.log ( err || data1 );
+				if (err) return;
 				// save last hash back to user
 				if (bank_id == 'bankA') {
 					Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankA: data1.hash.toString()}}, {upsert: true}, (err, data) => {
