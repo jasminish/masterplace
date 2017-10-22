@@ -121,6 +121,38 @@ app.post('/redeem', (req, res) => {
 			}
 		});
 	});
+})
+
+
+app.post('/transfer', (req, res) => {
+	console.log('transferring items:', req.body);
+	var owner_id = req.body.owner_id;
+	var recipient_id = req.body.recipient_id;
+	var item_id = req.body.item_id;
+
+	// retrieve item
+	Items.findOne({itemID: item_id}, function(err, document) {
+		if (!document) return res.send('Item not found');
+		blockchain.getEntry(document.lastHash, (err, data) => {
+			if (err) return res.send('Blockchain entry not found');
+			// verify ownership
+			if (data.recipientpk != owner_id) {
+				console.log('WARNING: ownership unverified');
+			}
+			//create entry
+			blockchain.createEntry(owner_id, recipient_id, 'item', item_id, document.lastHash, (err, data) => {
+				//upsert entry
+				Items.findOneAndUpdate({itemID: item_id}, {$set: {lastHash: data.hash, ownerID: recipient_id}}, {upsert: true}, function(err,doc) {
+					if (err) { throw err; }
+					else {
+						console.log("Updated");
+						res.status(200);
+					}
+				});
+			});
+
+		})
+	});
 
 
 })
