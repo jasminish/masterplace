@@ -65,31 +65,26 @@ function loadProtobuf() {
 				console.error("Source: "+error.getSource());
 				console.error(error)
 			}
-			
+
 		});
 	});
 }
 
 const {Items} = require('./db/models/Items.js');
-methods.createEntry = function createEntry(owner_id, recipient_id, transaction_type, num, callback) {
+methods.createEntry = function createEntry(owner_id, recipient_id, transaction_type, num, lastHash, callback) {
 	console.log("create entry");
+	console.log(owner_id, recipient_id, transaction_type, num);
 	var payload = {
 		ownerpk: users[owner_id].rsakey.exportKey('public'),
 		recipientpk: users[recipient_id].rsakey.exportKey('public'),
 		item: "",
-		points: "", 
+		points: "",
 		miles: "",
 		signature: users[owner_id].rsakey.sign(num, 'base64'),
-		lastHash: ""
+		lastHash: lastHash || ""
 	};
 	if (transaction_type == "item") {
 		payload.item = num;
-		var lastHash = Items.findOne({'id': num}, 'lastHash', function(err, item) {
-			return item.lastHash; 
-		});
-		if (lastHash) {
-			payload.lastHash = lastHash;
-		}
 	} else if (transaction_type == "points") {
 		payload.points = num;
 	} else if (transaction_type == "miles") {
@@ -97,7 +92,7 @@ methods.createEntry = function createEntry(owner_id, recipient_id, transaction_t
 	} else {
 		console.log('wrong transaction type');
 	}
-	
+
 	var err = msgClass.verify(payload);
 	if (err) {
 		console.log(msgClass, err);
@@ -114,10 +109,12 @@ methods.createEntry = function createEntry(owner_id, recipient_id, transaction_t
 			"value": encoded
 		}, function(err, result) {
 			if (err) {
-				console.log('error', err);
+				// console.log('error', err);
+				console.log('error');
 				callback(err);
 			} else {
-				console.log(result);
+				// console.log(result);
+				console.log('result');
 				callback(null, result);
 			}
 		});
@@ -195,7 +192,7 @@ methods.getEntry = function (hash, callback) {
 
 methods.checkOwner = function(item_id) {
 	var i = Items.findOne({'id': num}, 'lastHash ownerID', function(err, item) {
-		return item; 
+		return item;
 	});
 	if (i.lastHash) {
 		methods.getEntry(hash, function(err, data) {

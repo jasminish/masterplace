@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const objectID = require('objectid');
+const _ = require('lodash');
 //const {User} = require('./db/model/users.js');
 
 const app = express();
@@ -57,7 +58,7 @@ app.post('/entry', (req, res) => {
 	var recipient_id = req.body.recipient_id;
 	var num = null;
 	var type = '';
-	
+
 	if (req.body.object_id) {
 		type = 'item';
 		num = req.body.object_id;
@@ -85,15 +86,43 @@ app.post('/entry', (req, res) => {
 
 app.post('/redeem', (req, res) => {
 	console.log('redeeming items from points', req.body);
-	owner_id = req.body.owner_id;
-	recipient_id = owner_id;
-	object_id = req.body.object_id;
+	var bank_id = req.body.owner_id;
+	var recipient_id = req.body.recipient_id;
+	var points = req.body.points;
+	var item_id = req.body.item_id;
+	var card_no = req.body.card_no;
 
-	blockchain.createEntry(owner_id, recipient_id, object_id, (err, data) => {
-		if (err) return res.send('Unable to create entry');
-		addingItemsToDB(objectID(), object_id, null);
-		res.send(data);
+	Users.findOne({userID: recipient_id}, function(err, document) {
+		if (!document) return console.log("user not found");
+		console.log(document.bankInfo);
+		document.bankInfo.forEach((item) => {
+			if (item.cardNO == card_no) {
+				if (points <= item.rewardPoints) {
+					// create entry in blockchain
+					blockchain.createEntry(bank_id, recipient_id, 'item', item_id, null, (err, data) => {
+						if (err) return res.send('Unable to create entry');
+						console.log(data);
+						var item = Items({
+							itemID: item_id,
+							ownerID: bank_id,
+							lastHash: data.hash
+						});
+
+						item.save((err)=>{
+							if(err){
+								console.log('Error Adding Item To DB! ',err);
+							}else{
+								console.log('Adding Item to DB OK!');
+							}
+						})
+						res.send(data);
+					});
+				}
+			}
+		});
 	});
+
+
 })
 
 //POST /gifting to handle the gift feature
@@ -177,20 +206,20 @@ function retrieveUserInfo(user_id){
 }
 
 
-//For Adding new item to DB 
+//For Adding new item to DB
 function addingItemsToDB (item_id, catalogue_id){
 
-//Need to check this once more
+	//Need to check this once more
 	switch(catalogue_id){
 		case 100<catalogue_id<104:
-			bank_id = 50;
-			break;
+		bank_id = 50;
+		break;
 		case 105<catalogue_id<109:
-			bank_id = 51;
-			break;
+		bank_id = 51;
+		break;
 		case 110<catalogue_id<114:
-			bank_id = 52;
-			break;
+		bank_id = 52;
+		break;
 	}
 	var item = Items({
 		itemID: item_id,
@@ -223,7 +252,7 @@ function updatingItemsDB(item_id, latestHash, newOwner_id){
 
 //For Updating User DB
 function updatingUsersDB(giver_id, recipient_id, transactionType,cardNO,item_id){
-	
+
 	var giverCondition = {userID: giver_id};
 	var giverInfo = retrieveUserInfo(giver_id);
 	var recipientCondition = {userID: recipient_id};

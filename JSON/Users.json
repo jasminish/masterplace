@@ -62,13 +62,26 @@
 				"points": 20
 			}
 		}
-	}, 
+	},
 	{
 		"id": 5,
 		"name":"Jasmine",
 		"description":"For testing 1",
 		"version": 0,
 		"email":"jasminishh@gmail.com",
+		"cardInfo":{
+			"card1":{
+				"cardNumber":3322110987654321,
+				"points": 34
+			}
+		}
+	},
+	{
+		"id": 6,
+		"name":"Randy",
+		"description":"For testing 1",
+		"version": 0,
+		"email":"randy@gmail.com",
 		"cardInfo":{
 			"card1":{
 				"cardNumber":3322110987654321,
