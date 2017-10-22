@@ -71,7 +71,6 @@ methods.createEntry = function createEntry(owner_id, recipient_id, transaction_t
 		item: "",
 		points: "",
 		miles: "",
-		signature: users[owner_id].rsakey.sign(num, 'base64'),
 		lastHash: lastHash || ""
 	};
 	if (transaction_type == "item") {

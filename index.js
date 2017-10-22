@@ -123,8 +123,159 @@ app.post('/redeem', (req, res) => {
 	});
 })
 
+app.get('/createWallet', (req, res)=>{
+	blockchain.createEntry('1', '1', 'miles', '1000', null, (err,data) => {
+		console.log(err || data);
+	})
+})
 
-app.post('/transfer', (req, res) => {
+app.get('/points/:hash', (req, res) => {
+	blockchain.getEntry(req.params.hash, (err, data) => {
+		res.send(data.points);
+	})
+})
+
+app.get('/miles/:hash', (req, res) => {
+	blockchain.getEntry(req.params.hash, (err, data) => {
+		res.send(data.miles);
+	})
+})
+
+app.post('/transferPoints', (req, res) => {
+	console.log('transferring points:', req.body);
+	var owner_id = req.body.owner_id;
+	var owner_bank = req.body.owner_bank;
+
+	var recipient_id = req.body.recipient_id;
+	var recipient_bank = req.body.recipient_bank;
+
+	var transfer_points = req.body.transfer_points;
+
+	// get owner
+	Users.findOne({userID: owner_id}, function(err, document) {
+		if (!document) return console.log("owner not found");
+
+		// get owner points
+		var hash = (owner_bank == 'bankA' ? document.bankA : document.bankB);
+		blockchain.getEntry(hash, (err, data) => {
+			if (parseInt(data.points) < parseInt(transfer_points)) return console.log('not enough points');
+			console.log(data);
+
+			// create next entry
+			blockchain.createEntry(owner_id, recipient_id, 'points', (parseInt(data.points) - parseInt(transfer_points)).toString(), hash, (err, data) => {
+				if (err) return console.log('err creating entry for owner');
+				console.log("Created new entry for owner:", data.hash);
+				// update db
+				if (owner_bank == 'bankA') {
+					Users.findOneAndUpdate({userID: owner_id}, {$set: {bankA: data.hash.toString()}}, {upsert: true}, (err, data) => {
+						console.log(err || data);
+					});
+				} else {
+					Users.findOneAndUpdate({userID: owner_id}, {$set: {bankB: data.hash.toString()}}, {upsert: true}, (err, data) => {
+						console.log(err || data);
+					});
+				}
+
+				// get recipient hash
+				Users.findOne({userID: recipient_id}, function(err, document) {
+						if (!document) return console.log("recipient not found");
+
+						var hash = (recipient_bank == 'bankA' ? document.bankA : document.bankB);
+						// get recipient points
+						blockchain.getEntry(hash, (err, data) => {
+							// add entry to recipient
+							blockchain.createEntry(owner_id, recipient_id, 'points', (parseInt(data.points) + parseInt(transfer_points)).toString(), hash, (err, data) => {
+								if (err) return console.log('err creating entry for recipient');
+
+								console.log("Created new entry for recipient:", data.hash);
+								// update db
+								if (recipient_bank == 'bankA') {
+									Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankA: data.hash.toString()}}, {upsert: true}, (err, data) =>{
+										console.log(err || data);
+									});
+								} else {
+									Users.findOneAndUpdate({userID: recipient_id}, {$set: {bankB: data.hash.toString()}}, {upsert: true}, (err, data) =>{
+										console.log(err || data);
+									});
+								}
+							});
+						})
+
+				})
+			})
+
+		})
+	})
+})
+
+app.post('/transferMiles', (req, res) => {
+	console.log('transferring miles:', req.body);
+	var owner_id = req.body.owner_id;
+	var owner_airline = req.body.owner_airline;
+
+	var recipient_id = req.body.recipient_id;
+	var recipient_airline = req.body.recipient_airline;
+
+	var transfer_miles = req.body.transfer_miles;
+
+	// get owner
+	Users.findOne({userID: owner_id}, function(err, document) {
+		if (!document) return console.log("owner not found");
+
+		// get owner points
+		var hash = (owner_airline == 'airlineA' ? document.airlineA : document.airlineB);
+		blockchain.getEntry(hash, (err, data) => {
+			if (parseInt(data.miles) < parseInt(transfer_miles)) return console.log('not enough miles');
+			console.log(data);
+
+			// create next entry
+			blockchain.createEntry(owner_id, recipient_id, 'miles', (parseInt(data.miles) - parseInt(transfer_miles)).toString(), hash, (err, data) => {
+				if (err) return console.log('err creating entry for owner');
+				console.log("Created new entry for owner:", data.hash);
+				// update db
+				if (owner_airline == 'bankA') {
+					Users.findOneAndUpdate({userID: owner_id}, {$set: {airlineA: data.hash.toString()}}, {upsert: true}, (err, data) => {
+						console.log(err || data);
+					});
+				} else {
+					Users.findOneAndUpdate({userID: owner_id}, {$set: {airlineB: data.hash.toString()}}, {upsert: true}, (err, data) => {
+						console.log(err || data);
+					});
+				}
+
+				// get recipient hash
+				Users.findOne({userID: recipient_id}, function(err, document) {
+						if (!document) return console.log("recipient not found");
+
+						var hash = (recipient_airline == 'airlineA' ? document.airlineA : document.airlineB);
+						// get recipient points
+						blockchain.getEntry(hash, (err, data) => {
+							// add entry to recipient
+							blockchain.createEntry(owner_id, recipient_id, 'miles', (parseInt(data.miles) + parseInt(transfer_miles)).toString(), hash, (err, data) => {
+								if (err) return console.log('err creating entry for recipient');
+
+								console.log("Created new entry for recipient:", data.hash);
+								// update db
+								if (recipient_airline == 'airlineA') {
+									Users.findOneAndUpdate({userID: recipient_id}, {$set: {airlineA: data.hash.toString()}}, {upsert: true}, (err, data) =>{
+										console.log(err || data);
+									});
+								} else {
+									Users.findOneAndUpdate({userID: recipient_id}, {$set: {airlineB: data.hash.toString()}}, {upsert: true}, (err, data) =>{
+										console.log(err || data);
+									});
+								}
+							});
+						})
+
+				})
+			})
+
+		})
+	})
+})
+
+app.post('/transferItem', (req, res) => {
 	console.log('transferring items:', req.body);
 	var owner_id = req.body.owner_id;
 	var recipient_id = req.body.recipient_id;

@@ -8,14 +8,10 @@ var usersSchema = new mongoose.Schema({
 	userName:{
 		type: String
 	},
-	bankInfo:[{
-			cardNO: {type: Number},
-			rewardPoints: {type: Number, default: 0}
-		}],
-	currentMileage: {
-		type: Number,
-		default: 0
-	}
+	bankA: {type: String},
+	bankB: {type: String},
+	airlineA: {type: String},
+	airlineB: {type: String}
 });
 
 
