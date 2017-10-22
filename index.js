@@ -77,6 +77,9 @@ app.post('/entry', (req, res) => {
 	console.log('creating transaction entry: ', type);
 	blockchain.createEntry(owner_id, recipient_id, type, num, (err, data) => {
 		if (err) return res.send(400);
+		if (type == "item") {
+			updatingItemsDB(num, data.hash, recipient_id);
+		}
 		res.send(data);
 	})
 })
@@ -89,6 +92,7 @@ app.post('/redeem', (req, res) => {
 
 	blockchain.createEntry(owner_id, recipient_id, object_id, (err, data) => {
 		if (err) return res.send('Unable to create entry');
+		addingItemsToDB(objectID(), object_id, null);
 		res.send(data);
 	});
 })
@@ -175,11 +179,24 @@ function retrieveUserInfo(user_id){
 
 
 //For Adding new item to DB 
-function addingItemsToDB (item_id, bank_id, latestHash){
+function addingItemsToDB (item_id, catalogue_id){
+
+//Need to check this once more
+	switch(catalogue_id){
+		case 100<catalogue_id<104:
+			bank_id = 50;
+			break;
+		case 105<catalogue_id<109:
+			bank_id = 51;
+			break;
+		case 110<catalogue_id<114:
+			bank_id = 52;
+			break;
+	}
 	var item = Items({
 		itemID: item_id,
 		ownerID: bank_id,
-		lastHash: latestHash
+		lastHash: null
 	});
 
 	item.save((err)=>{
@@ -206,6 +223,11 @@ function updatingItemsDB(item_id, latestHash, newOwner_id){
 }
 
 //For Updating User DB
-function updatingUsersDB(){
+function updatingUsersDB(giver_id, recipient_id, transactionType,cardNO,item_id){
 	
+	var giverCondition = {userID: giver_id};
+	var giverInfo = retrieveUserInfo(giver_id);
+	var recipientCondition = {userID: recipient_id};
+	var recipientInfo = retrieveUserInfo(recipient_id);
+
 }
