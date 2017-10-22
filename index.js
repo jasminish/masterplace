@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const objectID = require('objectid');
 //const {User} = require('./db/model/users.js');
 
 const app = express();
@@ -74,8 +75,23 @@ app.post('/redeem', (req, res) => {
 })
 
 app.post('/login',(req,res)=>{
-	console.log(req.body.username);
-	console.log(req.body.password);
+
+	var rewards2 = Rewards({
+	  name: 'Gabriel',
+	  userID: 1,
+	  bank: 'Bank 1',
+	  item: 'iPhone X',
+	  hash: 'djksfhlkasdf',
+	  slotNumber: '2131243561'
+	});
+
+	// save the user
+	rewards2.save(function(err) {
+	  if (err) throw err;
+
+	  console.log('User created!');
+	});
+
 	console.log('Logging in');
 	res.send()
 })
