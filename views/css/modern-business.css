@@ -1,0 +1,287 @@
+/*!
+ * Start Bootstrap - Modern Business (https://startbootstrap.com/template-overviews/modern-business)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-logomodern-business-nav/blob/master/LICENSE)
+ */
+
+body {
+  padding-top: 54px;
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
+.carousel-item {
+  height: 65vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.portfolio-item {
+  margin-bottom: 30px;
+}
+
+@font-face {
+    font-family: MarkPro;
+    src: url('/../fonts/MarkPro');
+}
+
+h1{
+  font-family: 'MarkPro', sans-serif;
+}
+
+#button1 {
+    background-color: #ffffff; 
+    border: none;
+    color: #ff5f00;
+    padding: 5px 60px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+#button1 {
+    background-color: #ff5f00; 
+    color: white; 
+    border-radius: 6px;
+    border: 2px solid #ff5f00;
+    padding-left:10px;
+    padding-right:10px;
+    text-decoration:center;
+
+}
+
+#button1:hover {
+    background-color: #ffffff;
+    color: #ff5f00;
+    border-radius: 6px;
+    border: 2px solid #ffffff;
+}
+
+#button2 {
+    background-color: #ffffff;
+    border: none;
+    color: #ff5f00;
+    padding: 5px 60px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+#button2 {
+    background-color: #ff5f00; 
+    color: white; 
+    border-radius: 6px;
+    border: 2px solid #ff5f00;
+    padding-left:10px;
+    padding-right:10px;
+    text-decoration:center;
+
+}
+
+#button2:hover {
+    background-color: #ffffff;
+    color: #ff5f00;
+    border-radius: 6px;
+    border: 2px solid #ffffff;
+}
+
+#button3 {
+    background-color: #ffffff;
+    border: none;
+    color: #ff5f00;
+    padding: 5px 60px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+#button3 {
+    background-color: #ff5f00; 
+    color: white; 
+    border-radius: 6px;
+    border: 2px solid #ff5f00;
+    padding-left:10px;
+    padding-right:10px;
+    text-decoration:center;
+
+}
+
+#button3:hover {
+    background-color: #ffffff;
+    color: #ff5f00;
+    border-radius: 6px;
+    border: 2px solid #ffffff;
+}
+
+#button4 {
+    background-color: #ffffff;
+    border: none;
+    color: #ff5f00;
+    padding: 5px 60px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; 
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+#button4 {
+    background-color: #ff5f00; 
+    color: white; 
+    border-radius: 6px;
+    border: 2px solid #ff5f00;
+    padding-left:10px;
+    padding-right:10px;
+    text-decoration:center;
+
+}
+
+#button4:hover {
+    background-color: #ffffff;
+    color: #ff5f00;
+    border-radius: 6px;
+    border: 2px solid #ffffff;
+}
+
+#container{
+  text-align: left;
+}
+
+#container2{
+  text-align:right;
+}
+
+h1{
+  text-align: center;
+  vertical-align: middle;
+  line-height: 90px; 
+  font-family: Helvetica-body, sans-serif;
+}
+
+h3{
+  text-align: center;
+  vertical-align: middle;
+  line-height: 80px;
+}
+
+/*div.gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 180px;
+}
+
+div.gallery:hover {
+    border: 1px solid #777;
+}
+
+div.gallery img {
+    width: 20px;
+    height: 20px;
+}*/
+
+/*our-features Area*/
+
+.features-content{
+    margin-bottom:50px;
+    padding:10px 20px;
+    transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+} 
+.features-content.active{
+    background:#ffffff;
+    color:#000;
+
+}
+.features-content:hover{
+    background:#ebebe0;
+    color:#000;
+}
+.features-content.active i{
+    color:#fff;
+}
+.features-content:hover i{
+    color:#fff;
+}
+
+.features-content h4{
+    margin-bottom:0;
+} 
+.features-content h4 span{
+    font-size: 20px;
+    font-weight: 300;
+}
+.features-content i{
+    font-size:25px;
+    padding-right:7px;
+}
+.features-content p{
+    font-size:14px;
+    margin-left:28px; 
+}
+
+input[type=text] {
+    background-color: #ffffff;
+    border: none;
+    max-width: 298px;
+    padding: 5px 60px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 180px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+    width: 100%;
+}
+
+.banner{
+    position: absolute;
+    left:210px;
+    right:0px;
+    top: 50px;
+}
+
+.profile{
+
+}
+
+.bladerunner{
+
+}
+
+}
+
+
