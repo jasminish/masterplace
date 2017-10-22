@@ -153,7 +153,7 @@ app.post('/postEntry',(req,res)=>{
 	var recipient_id = req.body.recipient_id;
 	var object_id = req.body.object_id;
 
-	createEntry(owner_id, recipient_id, object_id);x
+	createEntry(owner_id, recipient_id, object_id);
 
 })
 

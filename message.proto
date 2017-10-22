@@ -7,9 +7,9 @@ option java_outer_classname = "BarebonesProtocolBuffer";
 message Transaction {
 	string ownerpk = 1;     // owner public key
 	string recipientpk = 2; // recipient public key
-	string reference = 3;    // unique object id
-	optional string points = 4; 
-	optional string miles = 5; 
-	optional string signature = 6;    // signature of owner 
+	string item = 3;    // unique object id
+	string points = 4; 
+	string miles = 5; 
+	string signature = 6;    // signature of owner 
 	// optional string prevHash = 7; 
 }
