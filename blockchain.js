@@ -45,7 +45,7 @@ function loadProtobuf() {
 			console.log('error', err);
 		}
 		msgClass = root.lookupType("TM25.Transaction");
-		console.log(msgClass);
+		// console.log(msgClass);
 		blockchain.App.update({
 			id: appID,
 			name: appID,
@@ -78,19 +78,25 @@ methods.createEntry = function createEntry(owner_id, recipient_id, transaction_t
 			ownerpk: users[owner_id].rsakey.exportKey('public'),
 			recipientpk: users[recipient_id].rsakey.exportKey('public'),
 			item: num,
+			points: "", 
+			miles: "",
 			signature: users[owner_id].rsakey.sign(num, 'base64')
 		};
 	} else if (transaction_type == "points") {
 		payload = {
 			ownerpk: users[owner_id].rsakey.exportKey('public'),
 			recipientpk: users[recipient_id].rsakey.exportKey('public'),
+			item: "",
 			points: num,
+			miles: "",
 			signature: users[owner_id].rsakey.sign(num, 'base64')
 		};
 	} else if (transaction_type == "miles") {
 		payload = {
 			ownerpk: users[owner_id].rsakey.exportKey('public'),
 			recipientpk: users[recipient_id].rsakey.exportKey('public'),
+			item: "",
+			points: "",
 			miles: num, 
 			signature: users[owner_id].rsakey.sign(num, 'base64')
 		};
@@ -192,6 +198,11 @@ methods.getEntry = function (hash, callback) {
 		}
 	});
 }
+
+methods.something = function() {
+	
+	
+};
 
 
 initAPI();
