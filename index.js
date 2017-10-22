@@ -39,6 +39,14 @@ app.get('/block/:id', (req, res) => {
 	});
 })
 
+app.get('/entry/:id', (req, res) => {
+	var id = req.params.id;
+	blockchain.getEntry(id, (err, data) => {
+		if (err) return res.send(404);
+		res.send(data);
+	});
+})
+
 app.post('/block', (req, res) => {
 	console.log('creating transaction entry');
 	console.log(req.body);

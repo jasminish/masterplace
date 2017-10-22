@@ -83,7 +83,7 @@ methods.createEntry = function createEntry(owner_id, recipient_id, object_id, ca
 		owner_pk: users[owner_id].rsakey.exportKey('public'),
 		recipient_pk: users[recipient_id].rsakey.exportKey('public'),
 		type: 0,
-		signature: users[owner_id].rsakey.sign(object_id, 'base64')
+		// signature: users[owner_id].rsakey.sign(object_id, 'base64')
 	};
 	var err = msgClass.verify(payload);
 	if (err) {
@@ -91,6 +91,12 @@ methods.createEntry = function createEntry(owner_id, recipient_id, object_id, ca
 		callback(err);
 	} else {
 		var message = msgClass.create(payload);
+		console.log(message);
+		var encoded = msgClass.encode(message).finish().toString(encoding)
+		console.log(encoded);
+		var decoded = msgClass.decode(new Buffer(encoded, 'hex'));
+		console.log(decoded);
+		console.log(message);
 		blockchain.TransactionEntry.create({
 			"app": appID,
 			"encoding": encoding,
@@ -134,13 +140,6 @@ methods.getLastConfirmedBlock = function(callback) {
 				console.log("Lastest block:")
 				console.log(data[0]);
 				callback(null, data[0]);
-				// console.log(data[0].authority);     //Output-->PegupZdN96Kqe1GWgqEqLMkzeA4PotbUv2wiKZZqqqKDH3sDA9cozcEakAsmJxYRv8zHCHuuFujTRxUgYxrNA6Fw
-				// console.log(data[0].hash);     //Output-->87d97de8c553381adc735439762396355fe54322d580b7da642035a2c5b917bc
-				// console.log(data[0].nonce);     //Output-->13465573658468563000
-				// console.log(data[0].previous_block);     //Output-->f106b05908504960a5a5d47422cbb47a3ad138f6bbbb40e0af00d7750d04f0fb
-				// console.log(data[0].signature);     //Output-->AN1rKryh8muZCbtqPu7gFmahvx9N6emWyqMNgTDXGcomHSWQK9Tt7J3CUY1yDCFU7bTH7jD3qCyyta4GX8RBYtVVNif8X8kx4
-				// console.log(data[0].slot);     //Output-->1503572680
-				// console.log(data[0].version);     //Output-->1
 			}
 		});
 	}
@@ -148,32 +147,46 @@ methods.getLastConfirmedBlock = function(callback) {
 	methods.getBlock = function(id, callback) { //Id can be the slot or the hash of the block to retrieve
 		var requestData = {};
 		blockchain.Block.read(id, requestData
-		, function (error, data) {
-			if (error) {
-				console.error("HttpStatus: "+error.getHttpStatus());
-				console.error("Message: "+error.getMessage());
-				console.error("ReasonCode: "+error.getReasonCode());
-				console.error("Source: "+error.getSource());
-				console.error(error);
-				callback(error);
-			}
-			else {
-				console.log(data);
-				// console.log(data.authority);     //Output-->PkvgjbWm7FuWrFaRCyX8HToHtLwJZqzTNi2qYz7tPRiXkogZ59DXR11rbJ7fvrUNx8ogHzSQXSFt2eVnGi5ipHrJ
-				// console.log(data.nonce);     //Output-->18016650688634213912
-				// console.log(data.partitions[0].application);     //Output-->1160851504
-				// console.log(data.partitions[0].entries[0]);     //Output-->50cbc906b2d5e4e795b9aa79ad35e7b9989839a0a0fc95b2ecd063529db365fd
-				// console.log(data.partitions[0].entry_count);     //Output-->1
-				// console.log(data.partitions[0].merkle_root);     //Output-->50cbc906b2d5e4e795b9aa79ad35e7b9989839a0a0fc95b2ecd063529db365fd
-				// console.log(data.previous_block);     //Output-->72af7cf7953f59ef2d2bda2de0028793abd6124c5efdd18a4eddccb5edbeaace
-				// console.log(data.signature);     //Output-->iKx1CJLjCuUynDdZbxdqEuaJvhyMmUigSdsChHVQWiovi2WcC3Lv5REWtwRo8C6N1FNik32V3umBHzEi6VLVsoMNKjiN7nAfV5
-				// console.log(data.slot);     //Output-->1503574734
-				// console.log(data.version);     //Output-->1
-				callback(null, data);
-			}
-		});
-	}
+			, function (error, data) {
+				if (error) {
+					console.error("HttpStatus: "+error.getHttpStatus());
+					console.error("Message: "+error.getMessage());
+					console.error("ReasonCode: "+error.getReasonCode());
+					console.error("Source: "+error.getSource());
+					console.error(error);
+					callback(error);
+				}
+				else {
+					console.log(data);
+					callback(null, data);
+				}
+			});
+		}
 
-	initAPI();
+		methods.getEntry = function (hash, callback) {
+			var requestData = {
+				"hash": hash
+			};
+			blockchain.TransactionEntry.read("", requestData
+			, function (error, data) {
+				if (error) {
+					console.error("HttpStatus: "+error.getHttpStatus());
+					console.error("Message: "+error.getMessage());
+					console.error("ReasonCode: "+error.getReasonCode());
+					console.error("Source: "+error.getSource());
+					console.error(error);
+					callback(error);
+				}
+				else {
+					console.log(data.hash);     //Output-->1e6fc898c0f0853ca504a29951665811315145415fa5bdfa90253efe1e2977b1
+					console.log(data.slot);     //Output-->1503594631
+					console.log(data.status);     //Output-->confirmed
+					console.log(data.value);     //Output-->0a0f4d41393920446f63756d656e742031
+					callback(null, data);
+				}
+			});
+		}
 
-	module.exports = methods;
+		initAPI();
+
+		module.exports = methods;
