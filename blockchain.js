@@ -1,5 +1,3 @@
-// require('./server.js');
-
 var blockchain = require('mastercard-blockchain');
 var MasterCardAPI = blockchain.MasterCardAPI;
 var config = require('./config.json');
@@ -21,8 +19,6 @@ users.forEach(function(user) {
 	user.rsakey = key; // stored just for testing
 });
 
-
-
 // protobuf
 var protobuf = require('protobufjs');
 var protoFile = 'message.proto';
@@ -39,8 +35,6 @@ function initAPI() {
 		authentication: authentication
 	});
 	loadProtobuf();
-	//console.log('---------------Loading Data....');
-	// loadData();
 }
 
 var msgClass;
@@ -76,15 +70,34 @@ function loadProtobuf() {
 	});
 }
 
-methods.createEntry = function createEntry(owner_id, recipient_id, object_id, callback) {
+methods.createEntry = function createEntry(owner_id, recipient_id, transaction_type, num, callback) {
 	console.log("create entry");
-	var payload = {
-		reference: object_id,
-		ownerpk: users[owner_id].rsakey.exportKey('public'),
-		recipientpk: users[recipient_id].rsakey.exportKey('public'),
-		type: 0,
-		signature: users[owner_id].rsakey.sign(object_id, 'base64')
-	};
+	var payload;
+	if (transaction_type == "item") {
+		payload = {
+			ownerpk: users[owner_id].rsakey.exportKey('public'),
+			recipientpk: users[recipient_id].rsakey.exportKey('public'),
+			item: num,
+			signature: users[owner_id].rsakey.sign(num, 'base64')
+		};
+	} else if (transaction_type == "points") {
+		payload = {
+			ownerpk: users[owner_id].rsakey.exportKey('public'),
+			recipientpk: users[recipient_id].rsakey.exportKey('public'),
+			points: num,
+			signature: users[owner_id].rsakey.sign(num, 'base64')
+		};
+	} else if (transaction_type == "miles") {
+		payload = {
+			ownerpk: users[owner_id].rsakey.exportKey('public'),
+			recipientpk: users[recipient_id].rsakey.exportKey('public'),
+			miles: num, 
+			signature: users[owner_id].rsakey.sign(num, 'base64')
+		};
+	} else {
+		console.log('wrong transaction type');
+	}
+	
 	var err = msgClass.verify(payload);
 	if (err) {
 		console.log(msgClass, err);
@@ -92,10 +105,9 @@ methods.createEntry = function createEntry(owner_id, recipient_id, object_id, ca
 	} else {
 		var message = msgClass.create(payload);
 		var encoded = msgClass.encode(message).finish().toString(encoding);
-		console.log(encoded);
 		var decoded = msgClass.decode(new Buffer(encoded, encoding));
-		console.log(decoded);
-		console.log(message);
+		// console.log(decoded);
+		// console.log(message);
 		blockchain.TransactionEntry.create({
 			"app": appID,
 			"encoding": encoding,
@@ -110,17 +122,6 @@ methods.createEntry = function createEntry(owner_id, recipient_id, object_id, ca
 			}
 		});
 	}
-	
-}
-
-function getProperties(obj) {
-	var ret = [];
-	for (var name in obj) {
-		if (obj.hasOwnProperty(name)) {
-			ret.push(name);
-		}
-	}
-	return ret;
 }
 
 methods.getLastConfirmedBlock = function(callback) {
@@ -192,27 +193,6 @@ methods.getEntry = function (hash, callback) {
 	});
 }
 
-methods.base64toHex = function(input, callback) {
-	var requestData = {
-		"input": "hex",
-		"output": "base64",
-		"values": [input]
-	};
-	blockchain.Encoding.create(requestData, function (error, data) {
-		if (error) {
-			console.error("HttpStatus: "+error.getHttpStatus());
-			console.error("Message: "+error.getMessage());
-			console.error("ReasonCode: "+error.getReasonCode());
-			console.error("Source: "+error.getSource());
-			console.error(error);
-			callback(error);
-		}
-		else {
-			console.log(data.values[0]);     //Output-->ChFFYW1vbiA2MCBEb2N1bWVudA==
-			callback(null, data);
-		}
-	});
-}
 
 initAPI();
 
