@@ -8,7 +8,6 @@ const app = express();
 const port = process.env.port || 3000;
 
 const {mongoose} = require('./db/mongoose.js');
-const {Rewards} = require('./db/models/Rewards.js');
 const {Items} = require('./db/models/Items.js');
 const {Users} = require('./db/models/Users.js');
 const {Banks} = require('./db/models/Banks.js');
@@ -230,4 +229,5 @@ function updatingUsersDB(giver_id, recipient_id, transactionType,cardNO,item_id)
 	var recipientCondition = {userID: recipient_id};
 	var recipientInfo = retrieveUserInfo(recipient_id);
 
+	User.update({_id: "59ec4e1cdd623c12cb680161"},{$push: {'bankInfo.$.cardNO': 5555555}},(err)=>{});
 }
