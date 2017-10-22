@@ -7,6 +7,8 @@ const _ = require('lodash');
 
 const app = express();
 const port = process.env.port || 3000;
+app.use(express.static('views'));
+
 
 const {mongoose} = require('./db/mongoose.js');
 const {Items} = require('./db/models/Items.js');
@@ -26,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 //Home Page
 app.get('/',(req,res)=>{
 	console.log('hi');
-	res.sendFile(path.join(__dirname+'/test.html'));
+	res.sendFile(path.resolve('views', 'index.html'));
 })
 
 // Get latest confirmed block
