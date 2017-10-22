@@ -80,10 +80,10 @@ methods.createEntry = function createEntry(owner_id, recipient_id, object_id, ca
 	console.log("create entry");
 	var payload = {
 		reference: object_id,
-		owner_pk: users[owner_id].rsakey.exportKey('public'),
-		recipient_pk: users[recipient_id].rsakey.exportKey('public'),
+		ownerpk: users[owner_id].rsakey.exportKey('public'),
+		recipientpk: users[recipient_id].rsakey.exportKey('public'),
 		type: 0,
-		// signature: users[owner_id].rsakey.sign(object_id, 'base64')
+		signature: users[owner_id].rsakey.sign(object_id, 'base64')
 	};
 	var err = msgClass.verify(payload);
 	if (err) {
@@ -91,16 +91,15 @@ methods.createEntry = function createEntry(owner_id, recipient_id, object_id, ca
 		callback(err);
 	} else {
 		var message = msgClass.create(payload);
-		console.log(message);
-		var encoded = msgClass.encode(message).finish().toString(encoding)
+		var encoded = msgClass.encode(message).finish().toString(encoding);
 		console.log(encoded);
-		var decoded = msgClass.decode(new Buffer(encoded, 'hex'));
+		var decoded = msgClass.decode(new Buffer(encoded, encoding));
 		console.log(decoded);
 		console.log(message);
 		blockchain.TransactionEntry.create({
 			"app": appID,
 			"encoding": encoding,
-			"value": msgClass.encode(message).finish().toString(encoding)
+			"value": encoded
 		}, function(err, result) {
 			if (err) {
 				console.log('error', err);

@@ -5,10 +5,10 @@ option java_package = "com.mastercard.blockchain";
 option java_outer_classname = "BarebonesProtocolBuffer";
 
 message Transaction {
-	bytes reference = 1;    // unique hash reference to object
-	bytes owner_pk = 2;     // owner public key
-	bytes recipient_pk = 3; // recipient public key
-	//bytes signature = 4;    // signature of owner 
+	string reference = 1;    // unique hash reference to object
+	string ownerpk = 2;     // owner public key
+	string recipientpk = 3; // recipient public key
+	string signature = 4;    // signature of owner 
 
 	enum TransferType {
 		REWARD = 0; // default value
