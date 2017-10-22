@@ -49,17 +49,30 @@ app.get('/entry/:id', (req, res) => {
 	});
 })
 
-app.post('/block', (req, res) => {
-	console.log('creating transaction entry');
+app.post('/entry', (req, res) => {
 	console.log(req.body);
-	owner_id = req.body.owner_id;
-	recipient_id = req.body.recipient_id;
-	object_id = req.body.object_id;
+	var owner_id = req.body.owner_id;
+	var recipient_id = req.body.recipient_id;
+	var num = null;
+	var type = '';
 
-	blockchain.createEntry(owner_id, recipient_id, object_id, (err, data) => {
-		if (err) return res.send('Unable to create entry');
+	if (req.body.object_id) {
+		type = 'item';
+		num = req.body.object_id;
+	} else if (req.body.points) {
+		type = 'points';
+		num = req.body.points;
+	} else if (req.body.miles) {
+		type = 'miles';
+		num = req.body.miles;
+	} else {
+		return res.send(400);
+	}
+	console.log('creating transaction entry: ', type);
+	blockchain.createEntry(owner_id, recipient_id, type, num, (err, data) => {
+		if (err) return res.send(400);
 		res.send(data);
-	});
+	})
 })
 
 app.post('/redeem', (req, res) => {
@@ -84,7 +97,7 @@ app.post('/gift',(req,res)=>{
 	var giftHash = req.body.hash;
 	var currentUserInfo = retrieveUserInfo(currentUser_id);
 	var recipientUserInfo = retrieveUserInfo(recipient_id);
-	
+
 	console.log(currentUser_id);
 	console.log(recipient_id);
 	console.log(giftHash);
@@ -93,7 +106,7 @@ app.post('/gift',(req,res)=>{
 	// need newHash and newSlotNumber
 
 	//Update DB with the new owner credentials
-	
+
 	// var conditions = {hash: giftHash};
 	// var update = {user: recipientUserInfo.name, userID: recipientUserInfo.id, hash: newHash, slotNumber: newSlotNumber};
 
@@ -110,19 +123,19 @@ app.post('/gift',(req,res)=>{
 app.post('/login',(req,res)=>{
 
 	var rewards2 = Rewards({
-	  username: 'Krittin',
-	  userID: 2,
-	  bank: 'Bank 1',
-	  item: 'iPhone X',
-	  hash: 'hiodfhoiew',
-	  slotNumber: '73678126378921'
+		username: 'Krittin',
+		userID: 2,
+		bank: 'Bank 1',
+		item: 'iPhone X',
+		hash: 'hiodfhoiew',
+		slotNumber: '73678126378921'
 	});
 
 	// save the user
 	rewards2.save(function(err) {
-	  if (err) throw err;
+		if (err) throw err;
 
-	  console.log('User created!');
+		console.log('User created!');
 	});
 
 	console.log('Logging in');
