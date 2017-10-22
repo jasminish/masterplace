@@ -11,5 +11,5 @@ message Transaction {
 	string points = 4; 
 	string miles = 5; 
 	string signature = 6;    // signature of owner 
-	// optional string prevHash = 7; 
+	string lastHash = 7; 
 }
