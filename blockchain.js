@@ -1,19 +1,16 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const fs = require('fs');
-//const {User} = require('./db/model/users.js');
+// require('./server.js');
 
-const app = express();
-const port = process.env.port || 3000;
+var blockchain = require('mastercard-blockchain');
+var MasterCardAPI = blockchain.MasterCardAPI;
+var config = require('./config.json');
+var fs = require('fs');
 
-const userData = require('./JSON/Users.json');
-const rewardsCat = require('./JSON/RewardsCat.json');
-const owners = require('./JSON/Owners.json');
 
-console.log(userData);
-console.log(rewardsCat);
-console.log(owners);
+var consumerKey = config.CONSUMER_KEY;   // You should copy this from "My Keys" on your project page e.g. UTfbhDCSeNYvJpLL5l028sWL9it739PYh6LU5lZja15xcRpY!fd209e6c579dc9d7be52da93d35ae6b6c167c174690b72fa
+var keyStorePath = config.KEYSTORE_PATH; // e.g. /Users/yourname/project/sandbox.p12 | C:\Users\yourname\project\sandbox.p12
+var keyAlias = config.KEY_ALIAS;   // For production: change this to the key alias you chose when you created your production key
+var keyPassword = config.KEY_PASSWORD;   // For production: change this to the key alias you chose when you created your production key
+var appID = "TM25";
 
 // users
 var users = JSON.parse(fs.readFileSync('./JSON/Users.json', 'utf8'))
@@ -24,18 +21,7 @@ users.forEach(function(user) {
 	user.rsakey = key; // stored just for testing
 });
 
-//Home Page
-app.get('/',(req,res)=>{
-	console.log('hi');
-	res.sendFile(path.join(__dirname+'/test.html'));
-})
 
-app.post('/login',(req,res)=>{
-	console.log(req.body.username);
-	console.log(req.body.password);
-	console.log('Logging in');
-	res.send()
-})
 
 // protobuf
 var protobuf = require('protobufjs');
