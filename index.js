@@ -8,7 +8,10 @@ const app = express();
 const port = process.env.port || 3000;
 
 const {mongoose} = require('./db/mongoose.js');
-const {Rewards} = require('./db/models/Rewards.js')
+const {Rewards} = require('./db/models/Rewards.js');
+const {Items} = require('./db/models/Items.js');
+const {Users} = require('./db/models/Users.js');
+const {Banks} = require('./db/models/Banks.js');
 
 // data hardcoded for demo
 const userData = require('./JSON/Users.json');
