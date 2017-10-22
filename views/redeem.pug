@@ -43,8 +43,31 @@ html(lang="en")
               else
                 a.nav-link(href="#") Log In
     // Profile
-    .profile
-      img(src="images/nelsonProfile.png", width="200", height="400", align="right")
+    .profile(align="right")
+      ul#user(style="left: 40px; text-align: left;margin-top: 40px; padding-left: 20px; margin-bottom: 20px;font-size: 20px")
+        img(src="http://www.piedpiper.com/app/themes/pied-piper/dist/images/bighead.png", width="60px")
+        |  #{user.userName}
+      |
+      hr
+      |
+      ul#card1.cardList(style="text-align: left")
+        img(src="https://www.key.com/kco/images/apply-keybank-mastercard-large.png", width="100px")
+        a#card1Point.pointAmt #{user.bankA_points} pts
+      |
+      |
+      ul#card1.cardList(style="text-align: left")
+        img(src="https://www.citi.com/CRD/images/card_no_reflection/citi-secured-credit-card.jpg")
+        a#card2Point.pointAmt #{user.bankB_points} pts
+      |
+      |
+      ul#card1.cardList(style="text-align: left")
+        img(src="https://www.suntrust.com/Static/Images/personal-banking/card-art/check-cards/debit-delta-skymiles-world-mastercard-651x412.png")
+        a#card3Point.pointAmt #{user.airlineA_miles} miles
+      |
+      |
+      ul#card1.cardList(style="text-align: left")
+        img(src="https://www.barclaycardus.com/apply/img/lft/lftCardArtMNM.png")
+        a#card3Point.pointAmt #{user.airlineB_miles} miles
     |
     |
     style.
