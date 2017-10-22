@@ -105,15 +105,42 @@ methods.createEntry = function createEntry() {
 }
 
 function getProperties(obj) {
-    var ret = [];
-    for (var name in obj) {
-        if (obj.hasOwnProperty(name)) {
-            ret.push(name);
-        }
-    }
-    return ret;
+	var ret = [];
+	for (var name in obj) {
+		if (obj.hasOwnProperty(name)) {
+			ret.push(name);
+		}
+	}
+	return ret;
 }
 
-initAPI();
+methods.getLastConfirmedBlock = function() {
+	var requestData = {};
+	blockchain.Block.list(requestData
+		, function (error, data) {
+			if (error) {
+				console.error("HttpStatus: "+error.getHttpStatus());
+				console.error("Message: "+error.getMessage());
+				console.error("ReasonCode: "+error.getReasonCode());
+				console.error("Source: "+error.getSource());
+				console.error(error);
 
-module.exports = methods;
+			}
+			else {
+				console.log("Lastest block:")
+				console.log(data[0]);
+				// console.log(data[0].authority);     //Output-->PegupZdN96Kqe1GWgqEqLMkzeA4PotbUv2wiKZZqqqKDH3sDA9cozcEakAsmJxYRv8zHCHuuFujTRxUgYxrNA6Fw
+				// console.log(data[0].hash);     //Output-->87d97de8c553381adc735439762396355fe54322d580b7da642035a2c5b917bc
+				// console.log(data[0].nonce);     //Output-->13465573658468563000
+				// console.log(data[0].previous_block);     //Output-->f106b05908504960a5a5d47422cbb47a3ad138f6bbbb40e0af00d7750d04f0fb
+				// console.log(data[0].signature);     //Output-->AN1rKryh8muZCbtqPu7gFmahvx9N6emWyqMNgTDXGcomHSWQK9Tt7J3CUY1yDCFU7bTH7jD3qCyyta4GX8RBYtVVNif8X8kx4
+				// console.log(data[0].slot);     //Output-->1503572680
+				// console.log(data[0].version);     //Output-->1
+			}
+		});
+
+	}
+
+	initAPI();
+
+	module.exports = methods;

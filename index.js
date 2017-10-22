@@ -26,7 +26,7 @@ app.get('/',(req,res)=>{
 
 // Get blocks
 app.get('/blockchain', (req, res) => {
-	blockchain.createEntry();
+	blockchain.getLastConfirmedBlock();
 	res.send('OK');
 })
 
