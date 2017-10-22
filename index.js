@@ -74,15 +74,48 @@ app.post('/redeem', (req, res) => {
 	});
 })
 
+//POST /gifting to handle the gift feature
+app.post('/gift',(req,res)=>{
+
+	//Need current user and recipeint IDs + hash + slotNumber
+
+	var currentUser_id = req.body.user_id;
+	var recipient_id = req.body.recipient_id;
+	var giftHash = req.body.hash;
+	var currentUserInfo = retrieveUserInfo(currentUser_id);
+	var recipientUserInfo = retrieveUserInfo(recipient_id);
+	
+	console.log(currentUser_id);
+	console.log(recipient_id);
+	console.log(giftHash);
+
+	//----- ADD Block Chain Code Here -----
+	// need newHash and newSlotNumber
+
+	//Update DB with the new owner credentials
+	
+	// var conditions = {hash: giftHash};
+	// var update = {user: recipientUserInfo.name, userID: recipientUserInfo.id, hash: newHash, slotNumber: newSlotNumber};
+
+	// Rewards.update(conditions,update,{multi: false},(err)=>{
+	// 	if(err){
+	// 		console.log(err);
+	// 	} else {
+	// 		console.log("Updated Successfully!");
+	// 	}
+	// })
+})
+
+
 app.post('/login',(req,res)=>{
 
 	var rewards2 = Rewards({
-	  name: 'Gabriel',
-	  userID: 1,
+	  username: 'Krittin',
+	  userID: 2,
 	  bank: 'Bank 1',
 	  item: 'iPhone X',
-	  hash: 'djksfhlkasdf',
-	  slotNumber: '2131243561'
+	  hash: 'hiodfhoiew',
+	  slotNumber: '73678126378921'
 	});
 
 	// save the user
@@ -117,5 +150,6 @@ app.listen(port,()=>{
 	console.log(`Node server started on Port ${port} at `, Date());
 });
 
-function retrieveSearchResults (){
+function retrieveUserInfo(user_id){
+	return userData[user_id-1];
 }
