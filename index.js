@@ -35,6 +35,13 @@ app.get('/',(req,res)=>{
 	res.render('index');
 })
 
+app.get('/myrewards.html',(req,res)=>{
+	if (loggedInUser == -1 || !loggedInUserData) {
+		return res.render('login');
+	}
+	res.render('myrewards', {user: loggedInUserData});
+})
+
 app.get('/mainplace.html',(req,res)=>{
 	if (loggedInUser == -1 || !loggedInUserData) {
 		return res.render('login');
