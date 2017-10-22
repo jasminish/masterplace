@@ -17,7 +17,7 @@ var users = JSON.parse(fs.readFileSync('./JSON/Users.json', 'utf8'))
 var NodeRSA = require('node-rsa');
 users.forEach(function(user) {
 	// generate RSA keypair
-	var key = new NodeRSA({b: 256});
+	var key = new NodeRSA({b: 1024});
 	user.rsakey = key; // stored just for testing
 });
 
@@ -76,13 +76,14 @@ function loadProtobuf() {
 	});
 }
 
-methods.createEntry = function createEntry() {
+methods.createEntry = function createEntry(owner_id, recipient_id, object_id) {
 	console.log("create entry");
 	var payload = {
-		reference: "EXAMPLE MESSAGE",
-		owner_pk: users[0].rsakey.exportKey('public'),
-		recipient_pk: users[1].rsakey.exportKey('public'),
-		type: 0
+		reference: object_id,
+		owner_pk: users[owner_id].rsakey.exportKey('public'),
+		recipient_pk: users[recipient_id].rsakey.exportKey('public'),
+		type: 0,
+		signature: users[owner_id].rsakey.sign(object_id, 'base64')
 	};
 	var err = msgClass.verify(payload);
 	if (err) {
