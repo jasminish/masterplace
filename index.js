@@ -23,6 +23,7 @@ const owners = require('./JSON/Owners.json');
 const blockchain = require('./blockchain');
 
 var loggedInUser = -1; //initiate to not logged in
+var loggedInUserData = null;
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -35,13 +36,10 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/mainplace.html',(req,res)=>{
-	if (loggedInUser == -1) {
+	if (loggedInUser == -1 || !loggedInUserData) {
 		return res.render('login');
 	}
-	fetchUserDetails(loggedInUser, (data) => {
-		if (null) return res.render('login');
-		res.render('mainplace', {user: data});
-	})
+	res.render('mainplace', {user: loggedInUserData});
 })
 
 app.get('/login.html',(req,res)=>{
@@ -49,23 +47,17 @@ app.get('/login.html',(req,res)=>{
 })
 
 app.get('/redeem.html',(req,res)=>{
-	if (loggedInUser == -1) {
+	if (loggedInUser == -1 || !loggedInUserData) {
 		return res.render('login');
 	}
-	fetchUserDetails(loggedInUser, (data) => {
-		if (null) return res.render('login');
-		res.render('redeem', {user: data});
-	})
+	res.render('redeem', {user: loggedInUserData});
 })
 
 app.get('/redeemlist.html',(req,res)=>{
-	if (loggedInUser == -1) {
+	if (loggedInUser == -1 || !loggedInUserData) {
 		return res.render('login');
 	}
-	fetchUserDetails(loggedInUser, (data) => {
-		if (null) return res.render('login');
-		res.render('redeemlist', {user: data});
-	})
+	res.render('redeemlist', {user: loggedInUserData});
 })
 
 // Get latest confirmed block
@@ -393,6 +385,7 @@ function fetchUserDetails(username, callback) {
 					document.airlineA_miles = data.miles;
 					blockchain.getEntry(document.airlineB, (err, data) => {
 						document.airlineB_miles = data.miles;
+						loggedInUserData = document;
 						callback(document);
 					})
 				})
