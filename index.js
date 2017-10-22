@@ -9,6 +9,7 @@ const port = process.env.port || 3000;
 const {mongoose} = require('./db/mongoose.js');
 const {Rewards} = require('./db/models/Rewards.js')
 
+// data hardcoded for demo 
 const userData = require('./JSON/Users.json');
 const rewardsCat = require('./JSON/RewardsCat.json');
 const owners = require('./JSON/Owners.json');
@@ -52,6 +53,18 @@ app.post('/block', (req, res) => {
 	console.log(req.body);
 	owner_id = req.body.owner_id;
 	recipient_id = req.body.recipient_id;
+	object_id = req.body.object_id;
+
+	blockchain.createEntry(owner_id, recipient_id, object_id, (err, data) => {
+		if (err) return res.send('Unable to create entry');
+		res.send(data);
+	});
+})
+
+app.post('/redeem', (req, res) => {
+	console.log('redeeming item from points', req.body); 
+	owner_id = req.body.owner_id;
+	recipient_id = owner_id;
 	object_id = req.body.object_id;
 
 	blockchain.createEntry(owner_id, recipient_id, object_id, (err, data) => {
