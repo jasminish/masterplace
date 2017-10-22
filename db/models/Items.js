@@ -6,12 +6,9 @@ var itemsSchema = new mongoose.Schema({
 		type: Number
 	},
 	ownerID:{
-		type: Number
+		type: Number, 
 	},
-	hash: {
-		type: String
-	},
-	slotNumber: {
+	lastHash: {
 		type: String
 	}
 });

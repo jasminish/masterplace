@@ -79,7 +79,7 @@ app.post('/entry', (req, res) => {
 })
 
 app.post('/redeem', (req, res) => {
-	console.log('redeeming item from points', req.body);
+	console.log('redeeming items from points', req.body);
 	owner_id = req.body.owner_id;
 	recipient_id = owner_id;
 	object_id = req.body.object_id;
@@ -168,4 +168,41 @@ app.listen(port,()=>{
 
 function retrieveUserInfo(user_id){
 	return userData[user_id-1];
+}
+
+
+//For Adding new item to DB 
+function addingItemsToDB (item_id, bank_id, latestHash){
+	var item = Items({
+		itemID: item_id,
+		ownerID: bank_id,
+		lastHash: latestHash
+	});
+
+	item.save((err)=>{
+		if(err){
+			console.log('Error Adding Item To DB! ',err);
+		}else{
+			console.log('Adding Item to DB OK!');
+		}
+	})
+}
+
+//For Updating Items in DB
+function updatingItemsDB(item_id, latestHash, newOwner_id){
+	var condition = {itemID : item_id};
+	var updates = {ownerID: newOwner_id, lastHash: latestHash};
+
+	Items.update(condition, updates,{multi:false},(err)=>{
+		if(err){
+			console.log('Error Updating Items DB!', err);
+		} else {
+			console.log('Updating Items DB OK!');
+		}
+	})
+}
+
+//For Updating User DB
+function updatingUsersDB(){
+	
 }
