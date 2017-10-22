@@ -128,6 +128,22 @@ html(lang="en")
         var span = document.getElementsByClassName("close")[0];
         // When the user clicks the button, open the modal
         btn.onclick = function() {
+        $.ajax({
+            url:'/redeem',
+            method: 'POST'
+            data:{
+                'owner_id': 'bankB',
+                'recipient_id': '1',
+                'points': 150,
+                'item_id': '123',
+            },
+            success:()=>{
+                console.log('Success!');
+            },
+            error:(err)=>{
+                console.log('error! ', err);
+            }
+        });
         modal.style.display = "block";
         }
         // When the user clicks on <span> (x), close the modal

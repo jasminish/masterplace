@@ -130,6 +130,22 @@
 
     // When the user clicks the button, open the modal
     btn.onclick = function() {
+        $.ajax({
+            url:'/redeem',
+            method: 'POST'
+            data:{
+                'owner_id': 'bankB',
+                'recipient_id': '1',
+                'points': 150,
+                'item_id': '1231',
+            },
+            success:()=>{
+                console.log('Success!');
+            },
+            error:(err)=>{
+                console.log('error! ', err);
+            }
+        });
         modal.style.display = "block";
     }
 
